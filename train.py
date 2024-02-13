@@ -27,7 +27,7 @@ if __name__ == '__main__':
     print(f"Number of GPUs: {args.num_gpus}")
 
     if args.inpaint:
-        with open('configs/mri.yml', 'r') as f:
+        with open('configs/celebahq.yml', 'r') as f:
             cfg = yaml.load(f, Loader=yaml.FullLoader)
             cfg = json.loads(json.dumps(cfg), object_hook=load_object)
 
