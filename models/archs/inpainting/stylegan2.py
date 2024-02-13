@@ -9,12 +9,12 @@ from torch import nn
 from torch.nn import functional as F
 from torch.autograd import Function
 try:
-    from models.comodgan.sync_batchnorm import SynchronizedBatchNorm2d
+    from models.archs.inpainting.sync_batchnorm import SynchronizedBatchNorm2d
 except:
     pass
 
-from models.comodgan.base_network import BaseNetwork
-from models.comodgan.op import FusedLeakyReLU, fused_leaky_relu, upfirdn2d
+from models.archs.inpainting.base_network import BaseNetwork
+from models.archs.inpainting.op import FusedLeakyReLU, fused_leaky_relu, upfirdn2d
 
 #from base_network import BaseNetwork
 #from op import FusedLeakyReLU, fused_leaky_relu, upfirdn2d
