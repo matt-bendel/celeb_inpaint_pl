@@ -43,7 +43,7 @@ class DataTransform:
         gt = (gt_im - mean[:, None, None]) / std[:, None, None]
         masked_im = gt * mask
 
-        return masked_im, gt, mask, mean, std
+        return masked_im.float(), gt.float(), mask.float(), mean.float(), std.float()
 
 
 class CelebAHQDataModule(pl.LightningDataModule):
