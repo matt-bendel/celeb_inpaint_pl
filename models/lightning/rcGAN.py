@@ -135,6 +135,7 @@ class rcGAN(pl.LightningModule):
             return d_loss
 
     def validation_step(self, batch, batch_idx, external_test=False):
+        print(batch[0])
         y, x, mask, mean, std = batch
 
         fig_count = 0
