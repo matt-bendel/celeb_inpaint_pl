@@ -147,11 +147,11 @@ class rcGAN(pl.LightningModule):
         gens = torch.zeros(size=(y.size(0), num_code, self.args.in_chans, self.args.im_size, self.args.im_size),
                            device=self.device)
         for z in range(num_code):
-            gens[:, z, :, :, :] = self.forward(y, mask) * std[:, None, None, None] + mean[:, None, None, None]
+            gens[:, z, :, :, :] = self.forward(y, mask) * std[:, :, None, None] + mean[:, :, None, None]
 
         avg_gen = torch.mean(gens, dim=1)
         single_gen = gens[:, 0, :, :, :]
-        gt = x * std[:, None, None, None] + mean[:, None, None, None]
+        gt = x * std[:, :, None, None] + mean[:, :, None, None]
 
         psnr_8s = []
         psnr_1s = []
