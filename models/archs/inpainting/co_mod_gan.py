@@ -157,7 +157,7 @@ class G_synthesis_co_mod_gan(nn.Module):
                     Es.append(
                         (
                             '%dx%d_0' % (2 ** res, 2 ** res),
-                            E_fromrgb(res, num_channels)
+                            E_fromrgb(res, num_channels+1)
                         ))
                 Es.append(
                     (
@@ -221,7 +221,7 @@ class G_synthesis_co_mod_gan(nn.Module):
                     upsample=False)
                 self.ToRGB = ToRGB(
                     nf(res - 1),
-                    mod_size, out_channel=num_channels)
+                    mod_size, out_channel=3)
 
             def forward(self, x, y, dlatents_in, x_global, E_features):
                 x_skip = E_features[self.res]
