@@ -45,7 +45,7 @@ class rcGAN(pl.LightningModule):
         alpha = Tensor(np.random.random((real_samples.size(0), 1, 1, 1))).to(self.device)
         # Get random interpolation between real and fake samples
         interpolates = (alpha * real_samples + ((1 - alpha) * fake_samples)).requires_grad_(True)
-        d_interpolates = self.discriminator(input=interpolates, y=y)
+        d_interpolates = self.discriminator(input=interpolates, label=y)
         # fake = Tensor(real_samples.shape[0], 1, d_interpolates.shape[-1], d_interpolates.shape[-1]).fill_(1.0).to(
         #     self.device)
         fake = Tensor(real_samples.shape[0], 1).fill_(1.0).to(
