@@ -179,8 +179,8 @@ class rcGAN(pl.LightningModule):
 
                 self.logger.log_image(
                     key=f"epoch_{self.current_epoch}_img",
-                    images=[Image.fromarray(np.uint8(plot_gt_np*255), 'L'), Image.fromarray(np.uint8(plot_avg_np*255), 'L'), Image.fromarray(np.uint8(cm.jet(5*np.abs(plot_gt_np - plot_avg_np))*255))],
-                    caption=["GT", f"Recon: PSNR (NP): {np_psnr:.2f}", "Error"]
+                    images=[Image.fromarray(np.uint8(plot_gt_np*255)), Image.fromarray(np.uint8(plot_avg_np*255))],
+                    caption=["GT", f"Recon: PSNR (NP): {np_psnr:.2f}"]
                 )
 
             self.trainer.strategy.barrier()
