@@ -123,8 +123,8 @@ class rcGAN(pl.LightningModule):
         if optimizer_idx == 0:
             x_hat = self.forward(y, mask)
 
-            real_pred = self.discriminator(input=x, y=y)
-            fake_pred = self.discriminator(input=x_hat, y=y)
+            real_pred = self.discriminator(input=x, label=y)
+            fake_pred = self.discriminator(input=x_hat, label=y)
 
             d_loss = self.adversarial_loss_discriminator(fake_pred, real_pred)
             d_loss += self.gradient_penalty(x_hat, x, y)
