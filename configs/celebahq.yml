@@ -10,6 +10,7 @@ num_z_train: 2
 in_chans: 4
 out_chans: 3
 im_size: 256
+image_size: 256
 
 # Optimizer:
 lr: 0.001
