@@ -179,7 +179,7 @@ class rcGAN(pl.LightningModule):
 
                 self.logger.log_image(
                     key=f"epoch_{self.current_epoch}_img",
-                    images=[Image.fromarray(np.uint8(plot_gt_np*255)), Image.fromarray(np.uint8(plot_avg_np*255))],
+                    images=[Image.fromarray(np.uint8(np.transpose(plot_gt_np, (256, 256, 3))*255), 'RGB'), Image.fromarray(np.uint8(np.transpose(plot_avg_np, (256, 256, 3))*255), 'RGB')],
                     caption=["GT", f"Recon: PSNR (NP): {np_psnr:.2f}"]
                 )
 
