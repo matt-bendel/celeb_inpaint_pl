@@ -1,6 +1,5 @@
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
-from torch.utils.data.dataset import Subset
 import pytorch_lightning as pl
 from typing import Optional
 from utils.inpaint.get_mask import MaskCreator
