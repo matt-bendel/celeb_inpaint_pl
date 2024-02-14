@@ -31,14 +31,13 @@ class DataTransform:
         self.mask_creator = MaskCreator()
 
     def __call__(self, gt_im):
-        print('in')
         mask1 = self.mask_creator.stroke_mask(self.args.image_size, self.args.image_size, max_length=self.args.image_size//2)
         mask2 = self.mask_creator.rectangle_mask(self.args.image_size, self.args.image_size, self.args.image_size//4, self.args.image_size//2)
 
         mask = mask1+mask2
         mask = mask > 0
         mask = mask.astype(np.float)
-        mask = torch.from_numpy(mask).unsqueeze(0)
+        mask = torch.from_numpy(1 - mask).unsqueeze(0)
 
         mean = torch.tensor([0.5, 0.5, 0.5])
         std = torch.tensor([0.5, 0.5, 0.5])
