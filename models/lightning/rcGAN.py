@@ -99,7 +99,7 @@ class rcGAN(pl.LightningModule):
         return 0.001 * torch.mean(real_pred ** 2)
 
     def training_step(self, batch, batch_idx, optimizer_idx):
-        y, x, mask, mean, std = batch
+        y, x, mask, mean, std = batch[0]
 
         # train generator
         if optimizer_idx == 1:
@@ -135,10 +135,7 @@ class rcGAN(pl.LightningModule):
             return d_loss
 
     def validation_step(self, batch, batch_idx, external_test=False):
-        print(len(batch))
-        print(batch[0].shape)
-        print(batch[1].shape)
-        y, x, mask, mean, std = batch
+        y, x, mask, mean, std = batch[0]
 
         fig_count = 0
 
