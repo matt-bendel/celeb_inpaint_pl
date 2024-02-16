@@ -38,6 +38,10 @@ class DataTransform:
         mask = mask.astype(np.float)
         mask = torch.from_numpy(1 - mask).unsqueeze(0)
 
+        # arr = np.ones((256, 256))
+        # arr[256 // 4: 3 * 256 // 4, 256 // 4: 3 * 256 // 4] = 0
+        # mask = torch.tensor(np.reshape(arr, (256, 256)), dtype=torch.float).repeat(3, 1, 1)
+
         mean = torch.tensor([0.5, 0.5, 0.5])
         std = torch.tensor([0.5, 0.5, 0.5])
         gt = (gt_im - mean[:, None, None]) / std[:, None, None]

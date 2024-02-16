@@ -169,18 +169,24 @@ class rcGAN(pl.LightningModule):
         if batch_idx == 0:
             if self.global_rank == 0 and self.current_epoch % 5 == 0 and fig_count == 0:
                 fig_count += 1
-                avg_gen_np = avg_gen[0].cpu().numpy()
+                samp_1_np = gens[0, 0, :, :, :].cpu().numpy()
+                samp_2_np = gens[0, 1, :, :, :].cpu().numpy()
+                samp_3_np = gens[0, 2, :, :, :].cpu().numpy()
                 gt_np = gt[0].cpu().numpy()
+                y_np = y[0].cpu().numpy()
 
-                plot_avg_np = avg_gen_np
                 plot_gt_np = gt_np
-
-                np_psnr = psnr(gt_np, avg_gen_np)
 
                 self.logger.log_image(
                     key=f"epoch_{self.current_epoch}_img",
-                    images=[Image.fromarray(np.uint8(np.transpose(plot_gt_np, (1, 2, 0))*255), 'RGB'), Image.fromarray(np.uint8(np.transpose(plot_avg_np, (1, 2, 0))*255), 'RGB')],
-                    caption=["GT", f"Recon: PSNR (NP): {np_psnr:.2f}"]
+                    images=[
+                        Image.fromarray(np.uint8(np.transpose(plot_gt_np, (1, 2, 0))*255), 'RGB'),
+                        Image.fromarray(np.uint8(np.transpose(y_np, (1, 2, 0)) * 255), 'RGB'),
+                        Image.fromarray(np.uint8(np.transpose(samp_1_np, (1, 2, 0))*255), 'RGB'),
+                        Image.fromarray(np.uint8(np.transpose(samp_2_np, (1, 2, 0)) * 255), 'RGB'),
+                        Image.fromarray(np.uint8(np.transpose(samp_3_np, (1, 2, 0)) * 255), 'RGB')
+                    ],
+                    caption=["x", "y", "Samp 1", "Samp 2", "Samp 3"]
                 )
 
             self.trainer.strategy.barrier()
