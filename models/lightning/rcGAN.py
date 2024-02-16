@@ -173,7 +173,7 @@ class rcGAN(pl.LightningModule):
                 samp_2_np = gens[0, 1, :, :, :].cpu().numpy()
                 samp_3_np = gens[0, 2, :, :, :].cpu().numpy()
                 gt_np = gt[0].cpu().numpy()
-                y_np = y[0].cpu().numpy()
+                y_np = (y * std[:, :, None, None] + mean[:, :, None, None])[0].cpu().numpy()
 
                 plot_gt_np = gt_np
 
