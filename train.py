@@ -10,6 +10,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from data.lightning.CelebAHQDataModule import CelebAHQDataModule
 from utils.parse_args import create_arg_parser
 from models.lightning.rcGAN import rcGAN
+from models.lightning.EigenGAN import EigenGAN
 from pytorch_lightning import seed_everything
 from pytorch_lightning.loggers import WandbLogger
 
@@ -33,7 +34,7 @@ if __name__ == '__main__':
 
         dm = CelebAHQDataModule(cfg)
 
-        model = rcGAN(cfg, args.exp_name, args.num_gpus)
+        model = EigenGAN(cfg, args.exp_name, args.num_gpus)
     else:
         print("No valid application selected. Please include one of the following args: --mri")
         exit()

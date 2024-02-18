@@ -5,6 +5,9 @@ data_path: "/storage/celebA-HQ/celeba_hq_256"
 num_z_test: 32
 num_z_valid: 8
 num_z_train: 2
+num_z_pca: 50
+num_pc: 5
+pca_reg_freq: 100
 
 # Data
 in_chans: 4
@@ -19,9 +22,9 @@ beta_2: 0.99
 
 # Loss weights
 gp_weight: 10
-adv_weight: 0.001
+adv_weight: 0.00003
 
 # Training
-batch_size: 10
+batch_size: 5
 num_epochs: 150
 psnr_gain_tol: 0.25
