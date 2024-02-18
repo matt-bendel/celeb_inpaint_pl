@@ -5,8 +5,8 @@ data_path: "/storage/celebA-HQ/celeba_hq_256"
 num_z_test: 32
 num_z_valid: 8
 num_z_train: 2
-num_z_pca: 30
-num_pc: 3
+num_z_pca: 40
+num_pc: 4
 pca_reg_freq: 100
 
 # Data
