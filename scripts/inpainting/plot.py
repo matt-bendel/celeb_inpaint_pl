@@ -1,12 +1,9 @@
 import torch
 import yaml
-import os
 import types
 import json
-import pathlib
 
 import numpy as np
-import matplotlib.patches as patches
 
 from data.lightning.CelebAHQDataModule import CelebAHQDataModule
 from utils.parse_args import create_arg_parser
@@ -14,8 +11,6 @@ from pytorch_lightning import seed_everything
 from models.lightning.rcGAN import rcGAN
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
-import sigpy as sp
-from scipy import ndimage
 
 def load_object(dct):
     return types.SimpleNamespace(**dct)
