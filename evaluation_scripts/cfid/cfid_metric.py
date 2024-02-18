@@ -142,7 +142,7 @@ class CFIDMetric:
 
     def _get_embed_im(self, inp, mean, std):
         embed_ims = torch.zeros(size=(inp.size(0), 3, 256, 256),
-                                device=self.args.device)
+                                device=inp.device)
         for i in range(inp.size(0)):
             im = inp[i, :, :, :] * std[i, :, None, None] + mean[i, :, None, None]
             im = 2 * (im - torch.min(im)) / (torch.max(im) - torch.min(im)) - 1
