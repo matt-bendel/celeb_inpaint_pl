@@ -135,7 +135,7 @@ class EigenGAN(pl.LightningModule):
             g_loss = self.adversarial_loss_generator(y, gens)
             g_loss += self.l1_std_p(avg_recon, gens, x)
 
-            if (self.global_step - 1) % self.args.pca_reg_freq == 0 and self.current_epoch >= 25:
+            if (self.global_step - 1) % self.args.pca_reg_freq == 0 and self.current_epoch >= 0:
                 gens_embed = torch.zeros(
                     size=(y.size(0), self.args.num_z_pca, 196608),
                     device=self.device)
