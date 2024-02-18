@@ -56,7 +56,7 @@ if __name__ == "__main__":
                                      condition_embedding=inception_embedding,
                                      cuda=True,
                                      args=cfg,
-                                     ref_loader=False,
+                                     train_loader=False,
                                      num_samps=1)
 
             cfids = cfid_metric.get_cfid_torch_pinv()
