@@ -48,7 +48,7 @@ if __name__ == "__main__":
         rcGAN_model.eval()
 
         eigenGAN_model = EigenGAN.load_from_checkpoint(
-            checkpoint_path=cfg.checkpoint_dir + '/eigengan/checkpoint_best.ckpt')
+            checkpoint_path=cfg.checkpoint_dir + args.exp_name + '/eigengan/checkpoint_best.ckpt')
 
         eigenGAN_model.cuda()
 
