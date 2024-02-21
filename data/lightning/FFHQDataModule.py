@@ -50,7 +50,7 @@ class DataTransform:
         return masked_im.float(), gt.float(), mask.float(), mean.float(), std.float()
 
 
-class CelebAHQDataModule(pl.LightningDataModule):
+class FFHQDataModule(pl.LightningDataModule):
     """
     DataModule used for semantic segmentation in geometric generalization project
     """
@@ -67,9 +67,11 @@ class CelebAHQDataModule(pl.LightningDataModule):
     def setup(self, stage: Optional[str] = None):
         # Assign train/val datasets for use in dataloaders
         transform = transforms.Compose([transforms.ToTensor(), DataTransform(self.args)])
-        dataset = datasets.ImageFolder(self.args.data_path, transform=transform)
-        train_data, dev_data, test_data = torch.utils.data.random_split(
-            dataset, [27000, 2000, 1000],
+        train_val_dataset = datasets.ImageFolder(self.args.data_path, transform=transform)
+        test_data = datasets.ImageFolder(self.args.data_path_test, transform=transform)
+
+        train_data, dev_data = torch.utils.data.random_split(
+            train_val_dataset, [45000, 4000],
             generator=torch.Generator().manual_seed(0)
         )
 

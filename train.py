@@ -8,6 +8,7 @@ import pytorch_lightning as pl
 
 from pytorch_lightning.callbacks import ModelCheckpoint
 from data.lightning.CelebAHQDataModule import CelebAHQDataModule
+from data.lightning.FFHQDataModule import FFHQDataModule
 from utils.parse_args import create_arg_parser
 from models.lightning.rcGAN import rcGAN
 from models.lightning.EigenGAN import EigenGAN
@@ -28,13 +29,27 @@ if __name__ == '__main__':
     print(f"Number of GPUs: {args.num_gpus}")
 
     if args.inpaint:
-        with open('configs/celebahq.yml', 'r') as f:
+        fname = 'configs/celebahq.yml'
+        if args.ffhq:
+            fname = 'configs/celebahq.yml'
+
+        with open(fname, 'r') as f:
             cfg = yaml.load(f, Loader=yaml.FullLoader)
             cfg = json.loads(json.dumps(cfg), object_hook=load_object)
 
-        dm = CelebAHQDataModule(cfg)
+        if args.eigengan:
+            cfg.batch_size = 2
 
-        model = EigenGAN(cfg, args.exp_name, args.num_gpus)
+        if args.ffhq:
+            dm = FFHQDataModule(cfg)
+        else:
+            dm = CelebAHQDataModule(cfg)
+
+        if args.eigengan:
+            model = EigenGAN(cfg, args.exp_name, args.num_gpus)
+        else:
+            model = rcGAN(cfg, args.exp_name, args.num_gpus)
+
     else:
         print("No valid application selected. Please include one of the following args: --mri")
         exit()

@@ -7,8 +7,11 @@ import numpy as np
 import pytorch_lightning as pl
 
 from data.lightning.CelebAHQDataModule import CelebAHQDataModule
+from data.lightning.FFHQDataModule import FFHQDataModule
 from utils.parse_args import create_arg_parser
 from models.lightning.rcGAN import rcGAN
+from models.lightning.EigenGAN import EigenGAN
+
 from pytorch_lightning import seed_everything
 from utils.embeddings import InceptionEmbedding
 from evaluation_scripts.cfid.cfid_metric import CFIDMetric
@@ -21,24 +24,35 @@ if __name__ == "__main__":
     args = create_arg_parser().parse_args()
     seed_everything(1, workers=True)
 
-    with open('configs/celebahq.yml', 'r') as f:
+    fname = 'configs/celebahq.yml'
+    if args.ffhq:
+        fname = 'configs/celebahq.yml'
+
+    with open(fname, 'r') as f:
         cfg = yaml.load(f, Loader=yaml.FullLoader)
         cfg = json.loads(json.dumps(cfg), object_hook=load_object)
 
-    dm = CelebAHQDataModule(cfg)
+    if args.ffhq:
+        dm = FFHQDataModule(cfg)
+    else:
+        dm = CelebAHQDataModule(cfg)
+
     dm.setup()
     val_loader = dm.val_dataloader()
     best_epoch = -1
     inception_embedding = InceptionEmbedding()
     best_cfid = 10000000
-    start_epoch = 100
-    end_epoch = 150
+    start_epoch = 98
+    end_epoch = 148
 
     with torch.no_grad():
         for epoch in range(start_epoch, end_epoch):
             print(f"VALIDATING EPOCH: {epoch + 1}")
             try:
-                model = rcGAN.load_from_checkpoint(checkpoint_path=cfg.checkpoint_dir + args.exp_name + f'/checkpoint-epoch={epoch}.ckpt')
+                if args.eigengan:
+                    model = EigenGAN.load_from_checkpoint(checkpoint_path=cfg.checkpoint_dir + args.exp_name + f'/checkpoint-epoch={epoch}.ckpt')
+                else:
+                    model = rcGAN.load_from_checkpoint(checkpoint_path=cfg.checkpoint_dir + args.exp_name + f'/checkpoint-epoch={epoch}.ckpt')
             except Exception as e:
                 print(e)
                 continue
@@ -59,7 +73,7 @@ if __name__ == "__main__":
                                      train_loader=False,
                                      num_samps=1)
 
-            cfids = cfid_metric.get_cfid_torch_pinv()
+            cfids = cfid_metric.get_cfid_torch_pinv().cpu().numpy()
 
             cfid_val = np.mean(cfids)
 
