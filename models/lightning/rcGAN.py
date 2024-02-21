@@ -10,6 +10,7 @@ from utils.embeddings import WrapInception
 from PIL import Image
 from torch.nn import functional as F
 from models.archs.inpainting.co_mod_gan import Generator, Discriminator
+from evaluation_scripts.cfid.cfid_metric import CFIDMetric
 from torchmetrics.functional import peak_signal_noise_ratio
 
 class rcGAN(pl.LightningModule):
@@ -27,6 +28,8 @@ class rcGAN(pl.LightningModule):
 
         self.feature_extractor = inception_v3(pretrained=True, transform_input=False)
         self.feature_extractor = WrapInception(self.feature_extractor.eval()).eval()
+
+        self.cfid = CFIDMetric(None, None, None, None)
 
         self.std_mult = 1
         self.is_good_model = 0
