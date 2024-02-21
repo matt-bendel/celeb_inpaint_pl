@@ -31,7 +31,7 @@ if __name__ == '__main__':
     if args.inpaint:
         fname = 'configs/celebahq.yml'
         if args.ffhq:
-            fname = 'configs/celebahq.yml'
+            fname = 'configs/ffhq.yml'
 
         with open(fname, 'r') as f:
             cfg = yaml.load(f, Loader=yaml.FullLoader)
