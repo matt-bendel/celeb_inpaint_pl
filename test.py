@@ -63,7 +63,7 @@ if __name__ == "__main__":
                                  cuda=True,
                                  args=cfg,
                                  train_loader=False,
-                                 num_samps=1)
+                                 num_samps=32)
 
         cfid_val_1 = cfid_metric.get_cfid_torch_pinv().cpu().numpy()
 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
                                  cuda=True,
                                  args=cfg,
                                  train_loader=False,
-                                 num_samps=1)
+                                 num_samps=8)
 
         cfids = cfid_metric.get_cfid_torch_pinv().cpu().numpy()
 
