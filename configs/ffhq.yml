@@ -23,7 +23,7 @@ beta_2: 0.99
 
 # Loss weights
 gp_weight: 10
-adv_weight: 0.00003
+adv_weight: 0.0001
 
 # Training
 batch_size: 5
