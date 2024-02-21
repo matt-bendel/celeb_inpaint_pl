@@ -1,23 +1,18 @@
 import os
 
 import torch
-import torchvision
 
 import pytorch_lightning as pl
 import numpy as np
 import torch.autograd as autograd
-import sigpy as sp
-from matplotlib import cm
-
 from torchvision.models.inception import inception_v3
 from utils.embeddings import WrapInception
 from PIL import Image
 from torch.nn import functional as F
 from models.archs.inpainting.co_mod_gan import Generator, Discriminator
-from evaluation_scripts.cfid.cfid_metric import CFIDMetric
 from torchmetrics.functional import peak_signal_noise_ratio
-
-class EigenGAN(pl.LightningModule):
+# TODO
+class rcGAN(pl.LightningModule):
     def __init__(self, args, exp_name, num_gpus):
         super().__init__()
         self.args = args
@@ -34,11 +29,6 @@ class EigenGAN(pl.LightningModule):
         self.feature_extractor = WrapInception(self.feature_extractor.eval()).eval()
 
         self.std_mult = 1
-        self.beta_pca = 1e-3
-        self.lam_eps = 0
-
-        self.cfid = CFIDMetric(None, None, None, None)
-
         self.is_good_model = 0
         self.resolution = self.args.im_size
 
@@ -47,16 +37,6 @@ class EigenGAN(pl.LightningModule):
     def get_noise(self, num_vectors):
         z = [torch.randn(num_vectors, 512, device=self.device)]
         return z
-
-    def get_embed_im(self, inp, mean, std):
-        embed_ims = torch.zeros(size=(inp.size(0), 3, 256, 256),
-                                device=self.device)
-        for i in range(inp.size(0)):
-            im = inp[i, :, :, :] * std[i, :, None, None] + mean[i, :, None, None]
-            im = 2 * (im - torch.min(im)) / (torch.max(im) - torch.min(im)) - 1
-            embed_ims[i, :, :, :] = im
-
-        return self.feature_extractor(embed_ims)
 
     def compute_gradient_penalty(self, real_samples, fake_samples, y):
         """Calculates the gradient penalty loss for WGAN GP"""
@@ -115,6 +95,16 @@ class EigenGAN(pl.LightningModule):
 
         return self.args.gp_weight * gradient_penalty
 
+    def get_embed_im(self, inp, mean, std):
+        embed_ims = torch.zeros(size=(inp.size(0), 3, 256, 256),
+                                device=self.device)
+        for i in range(inp.size(0)):
+            im = inp[i, :, :, :] * std[i, :, None, None] + mean[i, :, None, None]
+            im = 2 * (im - torch.min(im)) / (torch.max(im) - torch.min(im)) - 1
+            embed_ims[i, :, :, :] = im
+
+        return self.feature_extractor(embed_ims)
+
     def drift_penalty(self, real_pred):
         return 0.001 * torch.mean(real_pred ** 2)
 
@@ -134,53 +124,6 @@ class EigenGAN(pl.LightningModule):
             # adversarial loss is binary cross-entropy
             g_loss = self.adversarial_loss_generator(y, gens)
             g_loss += self.l1_std_p(avg_recon, gens, x)
-
-            if (self.global_step - 1) % self.args.pca_reg_freq == 0 and self.current_epoch >= 25:
-                gens_embed = torch.zeros(
-                    size=(y.size(0), self.args.num_z_pca, 196608),
-                    device=self.device)
-                for z in range(self.args.num_z_pca):
-                    gens_embed[:, z, :] = self.forward(y, mask).view(y.size(0), -1)
-
-                gens_zm = gens_embed - torch.mean(gens_embed, dim=1)[:, None, :].clone().detach()
-                gens_zm = gens_zm.view(gens_embed.shape[0], self.args.num_z_pca, -1)
-
-                x_zm = x.view(y.size(0), -1) - torch.mean(gens_embed, dim=1).clone().detach()
-                x_zm = x_zm.view(gens_embed.shape[0], -1)
-
-                w_loss = 0
-                sig_loss = 0
-
-                for n in range(gens_zm.shape[0]):
-                    _, S, Vh = torch.linalg.svd(gens_zm[n], full_matrices=False)
-
-                    current_x_xm = x_zm[n, :]
-                    inner_product = torch.sum(Vh * current_x_xm[None, :], dim=1)
-
-                    w_obj = inner_product ** 2
-                    w_loss += 1 / (torch.norm(current_x_xm, p=2) ** 2 * (self.args.num_z_pca // 10)).detach() * w_obj[
-                                                                                                                0:self.args.num_z_pca // 10].sum()  # 1e-3 for 25 iters
-
-                    gens_zm_det = gens_zm[n].detach()
-                    gens_zm_det[0, :] = x_zm[n, :].view(-1).detach()
-
-                    if self.current_epoch >= 50:
-                        inner_product_mat = 1 / self.args.num_z_pca * torch.matmul(Vh, torch.matmul(
-                            torch.transpose(gens_zm_det.clone().detach(), 0, 1),
-                            torch.matmul(gens_zm_det.clone().detach(), Vh.mT)))
-
-                        # cfg 1
-                        sig_diff = 1 / (torch.norm(current_x_xm, p=2) ** 2 * (self.args.num_z_pca // 10)).detach() * (
-                                    1 - 1 / (S ** 2 + self.lam_eps) * torch.diag(
-                                inner_product_mat.clone().detach())) ** 2
-
-                        sig_loss += self.beta_pca * sig_diff[0:self.args.num_z_pca // 10].sum()
-
-                w_loss_g = - self.beta_pca * w_loss
-                self.log('w_loss', w_loss_g, prog_bar=True)
-                self.log('sig_loss', sig_loss, prog_bar=True)
-                g_loss += w_loss_g
-                g_loss += sig_loss
 
             self.log('g_loss', g_loss, prog_bar=True)
 
@@ -298,18 +241,7 @@ class EigenGAN(pl.LightningModule):
                                  betas=(self.args.beta_1, self.args.beta_2))
         opt_d = torch.optim.Adam(self.discriminator.parameters(), lr=self.args.lr,
                                  betas=(self.args.beta_1, self.args.beta_2))
-
-        reduce_lr_on_plateau_mean = torch.optim.lr_scheduler.ReduceLROnPlateau(
-            opt_g,
-            mode='min',
-            factor=0.9,
-            patience=5,
-            min_lr=5e-5,
-        )
-
-        lr_scheduler = {"scheduler": reduce_lr_on_plateau_mean, "monitor": "cfid"}
-
-        return [opt_d, opt_g], lr_scheduler
+        return [opt_d, opt_g], []
 
     def on_save_checkpoint(self, checkpoint):
         checkpoint["beta_std"] = self.std_mult

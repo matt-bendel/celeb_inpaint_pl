@@ -1,18 +1,15 @@
 import os
 
 import torch
-import torchvision
 
 import pytorch_lightning as pl
 import numpy as np
 import torch.autograd as autograd
-import sigpy as sp
-from matplotlib import cm
-
+from torchvision.models.inception import inception_v3
+from utils.embeddings import WrapInception
 from PIL import Image
 from torch.nn import functional as F
 from models.archs.inpainting.co_mod_gan import Generator, Discriminator
-from evaluation_scripts.metrics import psnr
 from torchmetrics.functional import peak_signal_noise_ratio
 
 class rcGAN(pl.LightningModule):
@@ -27,6 +24,9 @@ class rcGAN(pl.LightningModule):
 
         self.generator = Generator(self.args.im_size)
         self.discriminator = Discriminator(self.args.im_size)
+
+        self.feature_extractor = inception_v3(pretrained=True, transform_input=False)
+        self.feature_extractor = WrapInception(self.feature_extractor.eval()).eval()
 
         self.std_mult = 1
         self.is_good_model = 0
@@ -84,7 +84,7 @@ class rcGAN(pl.LightningModule):
         for k in range(y.shape[0] - 1):
             gen_pred_loss += torch.mean(fake_pred[k + 1])
 
-        return - self.args.adv_weight * gen_pred_loss.mean()
+        return - 5e-3 * gen_pred_loss.mean()
 
     def l1_std_p(self, avg_recon, gens, x):
         return F.l1_loss(avg_recon, x) - self.std_mult * np.sqrt(
@@ -94,6 +94,16 @@ class rcGAN(pl.LightningModule):
         gradient_penalty = self.compute_gradient_penalty(x.data, x_hat.data, y.data)
 
         return self.args.gp_weight * gradient_penalty
+
+    def get_embed_im(self, inp, mean, std):
+        embed_ims = torch.zeros(size=(inp.size(0), 3, 256, 256),
+                                device=self.device)
+        for i in range(inp.size(0)):
+            im = inp[i, :, :, :] * std[i, :, None, None] + mean[i, :, None, None]
+            im = 2 * (im - torch.min(im)) / (torch.max(im) - torch.min(im)) - 1
+            embed_ims[i, :, :, :] = im
+
+        return self.feature_extractor(embed_ims)
 
     def drift_penalty(self, real_pred):
         return 0.001 * torch.mean(real_pred ** 2)
@@ -166,6 +176,10 @@ class rcGAN(pl.LightningModule):
         self.log('psnr_8_step', psnr_8s.mean(), on_step=True, on_epoch=False, prog_bar=True)
         self.log('psnr_1_step', psnr_1s.mean(), on_step=True, on_epoch=False, prog_bar=True)
 
+        img_e = self.get_embed_im(gens[:, 0, :, :, :], mean, std)
+        cond_e = self.get_embed_im(y, mean, std)
+        true_e = self.get_embed_im(x, mean, std)
+
         if batch_idx == 0:
             if self.global_rank == 0 and self.current_epoch % 5 == 0 and fig_count == 0:
                 fig_count += 1
@@ -191,11 +205,20 @@ class rcGAN(pl.LightningModule):
 
             self.trainer.strategy.barrier()
 
-        return {'psnr_8': psnr_8s.mean(), 'psnr_1': psnr_1s.mean()}
+        return {'psnr_8': psnr_8s.mean(), 'psnr_1': psnr_1s.mean(), 'img_e': img_e, 'cond_e': cond_e, 'true_e': true_e}
 
     def validation_epoch_end(self, validation_step_outputs):
         avg_psnr = self.all_gather(torch.stack([x['psnr_8'] for x in validation_step_outputs]).mean()).mean()
         avg_single_psnr = self.all_gather(torch.stack([x['psnr_1'] for x in validation_step_outputs]).mean()).mean()
+
+        true_embed = torch.cat([x['true_e'] for x in validation_step_outputs], dim=0)
+        image_embed = torch.cat([x['img_e'] for x in validation_step_outputs], dim=0)
+        cond_embed = torch.cat([x['cond_e'] for x in validation_step_outputs], dim=0)
+
+        cfid = self.cfid.get_cfid_torch_pinv(y_predict=image_embed, x_true=cond_embed, y_true=true_embed)
+        cfid = self.all_gather(cfid).mean()
+
+        self.log('cfid', cfid, prog_bar=True)
 
         avg_psnr = avg_psnr.cpu().numpy()
         avg_single_psnr = avg_single_psnr.cpu().numpy()
