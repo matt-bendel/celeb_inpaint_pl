@@ -42,8 +42,8 @@ if __name__ == "__main__":
     best_epoch = -1
     inception_embedding = InceptionEmbedding()
     best_cfid = 10000000
-    start_epoch = 98
-    end_epoch = 148
+    start_epoch = 112
+    end_epoch = 162
 
     with torch.no_grad():
         for epoch in range(start_epoch, end_epoch):
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     print(f"BEST EPOCH: {best_epoch}")
 
-    for epoch in range(100, 150):
+    for epoch in range(start_epoch, end_epoch):
         if epoch != best_epoch:
             os.remove(cfg.checkpoint_dir + args.exp_name + f'/checkpoint-epoch={epoch}.ckpt')
 
