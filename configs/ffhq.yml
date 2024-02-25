@@ -6,8 +6,8 @@ data_path_test: "/storage/FFHQ/ffhq256_900_if"
 num_z_test: 32
 num_z_valid: 8
 num_z_train: 2
-num_z_pca: 50
-num_pc: 5
+num_z_pca: 20
+num_pc: 2
 pca_reg_freq: 100
 
 # Data

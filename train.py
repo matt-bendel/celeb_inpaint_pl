@@ -37,8 +37,8 @@ if __name__ == '__main__':
             cfg = yaml.load(f, Loader=yaml.FullLoader)
             cfg = json.loads(json.dumps(cfg), object_hook=load_object)
 
-        if args.eigengan:
-            cfg.batch_size = 2
+        # if args.eigengan:
+            # cfg.batch_size = 2
 
         if args.ffhq:
             dm = FFHQDataModule(cfg)
