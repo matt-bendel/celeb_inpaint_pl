@@ -303,7 +303,7 @@ class EigenGAN(pl.LightningModule):
             opt_g,
             mode='min',
             factor=0.9,
-            patience=5,
+            patience=10,
             min_lr=5e-5,
         )
 
