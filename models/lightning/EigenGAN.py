@@ -34,7 +34,7 @@ class EigenGAN(pl.LightningModule):
         self.feature_extractor = WrapInception(self.feature_extractor.eval()).eval()
 
         self.std_mult = 1
-        self.beta_pca = 1e-3
+        self.beta_pca = 1e-4
         self.lam_eps = 0
 
         self.cfid = CFIDMetric(None, None, None, None)
