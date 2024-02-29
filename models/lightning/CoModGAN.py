@@ -11,8 +11,8 @@ from PIL import Image
 from torch.nn import functional as F
 from models.archs.inpainting.co_mod_gan import Generator, Discriminator
 from torchmetrics.functional import peak_signal_noise_ratio
-# TODO
-class rcGAN(pl.LightningModule):
+
+class CoModGAN(pl.LightningModule):
     def __init__(self, args, exp_name, num_gpus):
         super().__init__()
         self.args = args
@@ -28,8 +28,6 @@ class rcGAN(pl.LightningModule):
         self.feature_extractor = inception_v3(pretrained=True, transform_input=False)
         self.feature_extractor = WrapInception(self.feature_extractor.eval()).eval()
 
-        self.std_mult = 1
-        self.is_good_model = 0
         self.resolution = self.args.im_size
 
         self.save_hyperparameters()  # Save passed values
@@ -71,20 +69,8 @@ class rcGAN(pl.LightningModule):
     def adversarial_loss_discriminator(self, fake_pred, real_pred):
         return fake_pred.mean() - real_pred.mean()
 
-    def adversarial_loss_generator(self, y, gens):
-        fake_pred = torch.zeros(size=(y.shape[0], self.args.num_z_train), device=self.device)
-        for k in range(y.shape[0]):
-            cond = torch.zeros(1, gens.shape[2], gens.shape[3], gens.shape[4], device=self.device)
-            cond[0, :, :, :] = y[k, :, :, :]
-            cond = cond.repeat(self.args.num_z_train, 1, 1, 1)
-            temp = self.discriminator(input=gens[k], label=cond)
-            fake_pred[k] = temp[:, 0]
-
-        gen_pred_loss = torch.mean(fake_pred[0])
-        for k in range(y.shape[0] - 1):
-            gen_pred_loss += torch.mean(fake_pred[k + 1])
-
-        return - self.args.adv_weight * gen_pred_loss.mean()
+    def adversarial_loss_generator(self, fake_pred):
+        return - fake_pred.mean()
 
     def l1_std_p(self, avg_recon, gens, x):
         return F.l1_loss(avg_recon, x) - self.std_mult * np.sqrt(
@@ -113,17 +99,11 @@ class rcGAN(pl.LightningModule):
 
         # train generator
         if optimizer_idx == 1:
-            gens = torch.zeros(
-                size=(y.size(0), self.args.num_z_train, 3, self.args.im_size, self.args.im_size),
-                device=self.device)
-            for z in range(self.args.num_z_train):
-                gens[:, z, :, :, :] = self.forward(y, mask)
-
-            avg_recon = torch.mean(gens, dim=1)
+            x_hat = self.forward(y, mask)
+            fake_pred = self.discriminator(input=x_hat, label=y)
 
             # adversarial loss is binary cross-entropy
-            g_loss = self.adversarial_loss_generator(y, gens)
-            g_loss += self.l1_std_p(avg_recon, gens, x)
+            g_loss = self.adversarial_loss_generator(fake_pred)
 
             self.log('g_loss', g_loss, prog_bar=True)
 
@@ -219,21 +199,6 @@ class rcGAN(pl.LightningModule):
         cfid = self.all_gather(cfid).mean()
 
         self.log('cfid', cfid, prog_bar=True)
-
-        avg_psnr = avg_psnr.cpu().numpy()
-        avg_single_psnr = avg_single_psnr.cpu().numpy()
-
-        psnr_diff = (avg_single_psnr + 2.5) - avg_psnr
-        psnr_diff = psnr_diff
-
-        mu_0 = 2e-2
-        self.std_mult += mu_0 * psnr_diff
-
-        if np.abs(psnr_diff) <= self.args.psnr_gain_tol:
-            self.is_good_model = 1
-        else:
-            self.is_good_model = 0
-
         self.trainer.strategy.barrier()
 
     def configure_optimizers(self):
@@ -242,11 +207,3 @@ class rcGAN(pl.LightningModule):
         opt_d = torch.optim.Adam(self.discriminator.parameters(), lr=self.args.lr,
                                  betas=(self.args.beta_1, self.args.beta_2))
         return [opt_d, opt_g], []
-
-    def on_save_checkpoint(self, checkpoint):
-        checkpoint["beta_std"] = self.std_mult
-        checkpoint["is_valid"] = self.is_good_model
-
-    def on_load_checkpoint(self, checkpoint):
-        self.std_mult = checkpoint["beta_std"]
-        self.is_good_model = checkpoint["is_valid"]
