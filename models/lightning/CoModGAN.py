@@ -7,6 +7,7 @@ import numpy as np
 import torch.autograd as autograd
 from torchvision.models.inception import inception_v3
 from utils.embeddings import WrapInception
+from evaluation_scripts.cfid.cfid_metric import CFIDMetric
 from PIL import Image
 from torch.nn import functional as F
 from models.archs.inpainting.co_mod_gan import Generator, Discriminator
@@ -24,6 +25,7 @@ class CoModGAN(pl.LightningModule):
 
         self.generator = Generator(self.args.im_size)
         self.discriminator = Discriminator(self.args.im_size)
+        self.cfid = CFIDMetric(None, None, None, None)
 
         self.feature_extractor = inception_v3(pretrained=True, transform_input=False)
         self.feature_extractor = WrapInception(self.feature_extractor.eval()).eval()
