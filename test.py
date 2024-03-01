@@ -12,6 +12,7 @@ from utils.parse_args import create_arg_parser
 from pytorch_lightning import seed_everything
 from models.lightning.rcGAN import rcGAN
 from models.lightning.EigenGAN import EigenGAN
+from models.lightning.CoModGAN import CoModGAN
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 from utils.embeddings import InceptionEmbedding
@@ -48,6 +49,9 @@ if __name__ == "__main__":
     with torch.no_grad():
         if args.eigengan:
             model = EigenGAN.load_from_checkpoint(
+                checkpoint_path=cfg.checkpoint_dir + args.exp_name + '/checkpoint_best.ckpt')
+        elif args.comodgan:
+            model = CoModGAN.load_from_checkpoint(
                 checkpoint_path=cfg.checkpoint_dir + args.exp_name + '/checkpoint_best.ckpt')
         else:
             model = rcGAN.load_from_checkpoint(

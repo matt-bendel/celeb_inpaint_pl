@@ -11,6 +11,7 @@ from utils.parse_args import create_arg_parser
 from pytorch_lightning import seed_everything
 from models.lightning.rcGAN import rcGAN
 from models.lightning.EigenGAN import EigenGAN
+from models.lightning.CoModGAN import CoModGAN
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 
@@ -54,6 +55,13 @@ if __name__ == "__main__":
 
         eigenGAN_model.eval()
 
+        coModGAN_model = CoModGAN.load_from_checkpoint(
+            checkpoint_path=cfg.checkpoint_dir + args.exp_name + '/comodgan/checkpoint_best.ckpt')
+
+        coModGAN_model.cuda()
+
+        coModGAN_model.eval()
+
         for i, data in enumerate(test_loader):
             y, x, mask, mean, std = data[0]
             y = y.cuda()
@@ -66,16 +74,20 @@ if __name__ == "__main__":
                 size=(y.size(0), cfg.num_z_test, 3, cfg.im_size, cfg.im_size)).cuda()
             gens_eigengan = torch.zeros(
                 size=(y.size(0), cfg.num_z_test, 3, cfg.im_size, cfg.im_size)).cuda()
+            gens_comodgan = torch.zeros(
+                size=(y.size(0), cfg.num_z_test, 3, cfg.im_size, cfg.im_size)).cuda()
 
             for z in range(cfg.num_z_test):
                 gens_rcgan[:, z, :, :, :] = rcGAN_model.forward(y, mask) * std[:, :, None, None] + mean[:, :, None, None]
                 gens_eigengan[:, z, :, :, :] = eigenGAN_model.forward(y, mask) * std[:, :, None, None] + mean[:, :, None, None]
+                gens_comodgan[:, z, :, :, :] = coModGAN_model.forward(y, mask) * std[:, :, None, None] + mean[:, :, None, None]
 
             gt = x * std[:, :, None, None] + mean[:, :, None, None]
             zfr = y * std[:, :, None, None] + mean[:, :, None, None]
 
             for j in range(y.size(0)):
                 np_samps = {
+                    'comodgan': [],
                     'rcgan': [],
                     'eigengan': []
                 }
@@ -86,11 +98,12 @@ if __name__ == "__main__":
                 np_zfr = zfr[j].cpu().numpy()
 
                 for z in range(cfg.num_z_test):
+                    np_samps['comodgan'].append(gens_comodgan[j, z].cpu().numpy())
                     np_samps['rcgan'].append(gens_rcgan[j, z].cpu().numpy())
                     np_samps['eigengan'].append(gens_eigengan[j, z].cpu().numpy())
 
 
-                methods = ['rcgan', 'eigengan']
+                methods = ['comodgan', 'rcgan', 'eigengan']
 
                 # Global recon, error, std
                 nrow = len(methods)
