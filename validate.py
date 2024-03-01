@@ -11,6 +11,7 @@ from data.lightning.FFHQDataModule import FFHQDataModule
 from utils.parse_args import create_arg_parser
 from models.lightning.rcGAN import rcGAN
 from models.lightning.EigenGAN import EigenGAN
+from models.lightning.CoModGAN import CoModGAN
 
 from pytorch_lightning import seed_everything
 from utils.embeddings import InceptionEmbedding
