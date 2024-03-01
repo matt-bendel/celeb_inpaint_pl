@@ -50,6 +50,7 @@ if __name__ == "__main__":
             model = CoModGAN.load_from_checkpoint(
                 checkpoint_path=cfg.checkpoint_dir + args.exp_name + '/checkpoint_best.ckpt')
         else:
+            method = 'rcgan'
             model = rcGAN.load_from_checkpoint(
                 checkpoint_path=cfg.checkpoint_dir + args.exp_name + '/checkpoint_best.ckpt')
         model.cuda()
