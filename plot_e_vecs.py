@@ -109,7 +109,7 @@ if __name__ == "__main__":
 
 
                 for l in range(5):
-                    ax = plt.subplot(gs[0, l ])
+                    ax = plt.subplot(gs[0, l + 1])
                     im_np = vh[l].reshape((3, 256, 256))
                     im_np = (im_np - np.min(im_np)) / (np.max(im_np) - np.min(im_np))
                     im = ax.imshow(im_np.transpose(1, 2, 0))
