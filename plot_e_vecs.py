@@ -65,9 +65,9 @@ if __name__ == "__main__":
             std = std.cuda()
 
             gens = torch.zeros(
-                size=(y.size(0), cfg.num_z_test, 3, cfg.im_size, cfg.im_size)).cuda()
+                size=(y.size(0), 50, 3, cfg.im_size, cfg.im_size)).cuda()
 
-            for z in range(cfg.num_z_test):
+            for z in range(50):
                 gens[:, z, :, :, :] = model.forward(y, mask) * std[:, :, None, None] + mean[:, :, None, None]
 
             gt = x * std[:, :, None, None] + mean[:, :, None, None]
@@ -87,12 +87,12 @@ if __name__ == "__main__":
 
                 # TODO: Get evecs
 
-                for z in range(cfg.num_z_test):
+                for z in range(50):
                     np_samps = gens[j].cpu().numpy()
 
                 cov_mat = np.zeros((20, 3 * np_gt.shape[-1] * np_gt.shape[-2]))
 
-                for z in range(20):
+                for z in range(50):
                     cov_mat[z, :] = np_samps[z].flatten()
 
                 _, _, vh = np.linalg.svd(cov_mat, full_matrices=False)
