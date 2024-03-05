@@ -90,7 +90,7 @@ if __name__ == "__main__":
                 for z in range(50):
                     np_samps = gens[j].cpu().numpy()
 
-                cov_mat = np.zeros((20, 3 * np_gt.shape[-1] * np_gt.shape[-2]))
+                cov_mat = np.zeros((50, 3 * np_gt.shape[-1] * np_gt.shape[-2]))
 
                 for z in range(50):
                     cov_mat[z, :] = np_samps[z].flatten()
