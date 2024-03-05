@@ -91,9 +91,10 @@ if __name__ == "__main__":
                     np_samps = gens[j].cpu().numpy()
 
                 cov_mat = np.zeros((50, 3 * np_gt.shape[-1] * np_gt.shape[-2]))
+                samp_avg = torch.mean(gens[j], dim=0).cpu().numpy()
 
                 for z in range(50):
-                    cov_mat[z, :] = np_samps[z].flatten()
+                    cov_mat[z, :] = np_samps[z].flatten() - samp_avg.flatten()
 
                 _, _, vh = np.linalg.svd(cov_mat, full_matrices=False)
 
