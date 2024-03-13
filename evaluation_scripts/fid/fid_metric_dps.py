@@ -190,7 +190,7 @@ class FIDMetric:
 
             with torch.no_grad():
                 for j in range(1):
-                    image = self._get_embed_im(recon, None, None)
+                    image = self._get_embed_im(recon, mean, std)
                     condition_im = self._get_embed_im(y, mean, std)
 
                     img_e = self.image_embedding(image)
@@ -221,39 +221,39 @@ class FIDMetric:
             recon = recon.cuda()
             count += y.shape[0]
 
-            nrow = 1
-            ncol = 2
-
-            fig = plt.figure(figsize=(ncol + 1, nrow + 1))
-
-            gs = gridspec.GridSpec(nrow, ncol,
-                                   wspace=0.0, hspace=0.0,
-                                   top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
-                                   left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
-
-            ax = plt.subplot(gs[0, 0])
-            ax.imshow(np.transpose((x[0] * std[0, :, None, None] + mean[0, :, None, None]).cpu().numpy(), (1, 2, 0)))
-            ax.set_xticklabels([])
-            ax.set_yticklabels([])
-            ax.set_xticks([])
-            ax.set_yticks([])
-            ax.set_title("x")
-
-            ax = plt.subplot(gs[0, 1])
-            ax.imshow(np.transpose((recon[0] * std[0, :, None, None] + mean[0, :, None, None]).cpu().numpy(), (1, 2, 0)))
-            ax.set_xticklabels([])
-            ax.set_yticklabels([])
-            ax.set_xticks([])
-            ax.set_yticks([])
-            ax.set_title("x_hat")
-
-            plt.savefig(f'figures/test.png', bbox_inches='tight', dpi=300)
-            plt.close(fig)
-            exit()
+            # nrow = 1
+            # ncol = 2
+            #
+            # fig = plt.figure(figsize=(ncol + 1, nrow + 1))
+            #
+            # gs = gridspec.GridSpec(nrow, ncol,
+            #                        wspace=0.0, hspace=0.0,
+            #                        top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
+            #                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+            #
+            # ax = plt.subplot(gs[0, 0])
+            # ax.imshow(np.transpose((x[0] * std[0, :, None, None] + mean[0, :, None, None]).cpu().numpy(), (1, 2, 0)))
+            # ax.set_xticklabels([])
+            # ax.set_yticklabels([])
+            # ax.set_xticks([])
+            # ax.set_yticks([])
+            # ax.set_title("x")
+            #
+            # ax = plt.subplot(gs[0, 1])
+            # ax.imshow(np.transpose((recon[0] * std[0, :, None, None] + mean[0, :, None, None]).cpu().numpy(), (1, 2, 0)))
+            # ax.set_xticklabels([])
+            # ax.set_yticklabels([])
+            # ax.set_xticks([])
+            # ax.set_yticks([])
+            # ax.set_title("x_hat")
+            #
+            # plt.savefig(f'figures/test.png', bbox_inches='tight', dpi=300)
+            # plt.close(fig)
+            # exit()
 
             with torch.no_grad():
                 for j in range(1):
-                    image = self._get_embed_im(recon, None, None)
+                    image = self._get_embed_im(recon, mean, std)
                     condition_im = self._get_embed_im(y, mean, std)
 
                     img_e = self.image_embedding(image)
