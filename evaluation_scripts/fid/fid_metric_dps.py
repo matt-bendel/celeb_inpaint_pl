@@ -218,6 +218,9 @@ class FIDMetric:
             for j in range(x.shape[0]):
                 recon[j] = torch.load(f'/storage/matt_models/inpainting/dps/val/image_{count + j}_sample_0.pt')
 
+            recon = recon.cuda()
+            count += y.shape[0]
+
             nrow = 1
             ncol = 2
 
@@ -247,9 +250,6 @@ class FIDMetric:
             plt.savefig(f'figures/test.png', bbox_inches='tight', dpi=300)
             plt.close(fig)
             exit()
-
-            recon = recon.cuda()
-            count += y.shape[0]
 
             with torch.no_grad():
                 for j in range(1):
