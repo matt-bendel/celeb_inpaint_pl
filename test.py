@@ -69,10 +69,12 @@ if __name__ == "__main__":
                                cuda=True,
                                args=cfg,
                                dev_loader=val_loader,
-                               ref_loader=train_loader,
-                               num_samps=1)
+                               ref_loader=train_loader)
 
-        fid_val = fid_metric.get_cfid_torch_pinv().cpu().numpy()
+        fid_val = fid_metric.get_fid()
+
+        print(fid_val)
+        exit()
 
         cfid_metric = CFIDMetric(gan=model,
                                  loader=test_loader,
