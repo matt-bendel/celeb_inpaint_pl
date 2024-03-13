@@ -1,5 +1,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
 import os
+import time
+
 import torch
 
 import numpy as np
@@ -154,6 +156,7 @@ class CFIDMetric:
         image_embed = []
         cond_embed = []
         true_embed = []
+        times = []
 
         for i, data in tqdm(enumerate(self.loader),
                             desc='Computing generated distribution',
@@ -167,7 +170,10 @@ class CFIDMetric:
 
             with torch.no_grad():
                 for j in range(self.num_samps):
+                    start = time.time()
                     recon = self.gan(y, mask)
+                    end = time.time() - start
+                    times.append(end)
 
                     image = self._get_embed_im(recon, mean, std)
                     condition_im = self._get_embed_im(y, mean, std)
@@ -188,6 +194,8 @@ class CFIDMetric:
                         true_embed.append(true_e.cpu().numpy())
                         image_embed.append(img_e.cpu().numpy())
                         cond_embed.append(cond_e.cpu().numpy())
+
+        print(np.mean(times))
 
 
         if self.dev_loader:

@@ -2,6 +2,7 @@ import torch
 import yaml
 import types
 import json
+import time
 
 import numpy as np
 
@@ -70,6 +71,7 @@ if __name__ == "__main__":
                                  num_samps=32)
 
         cfid_val_1 = cfid_metric.get_cfid_torch_pinv().cpu().numpy()
+        exit()
 
         cfid_metric = CFIDMetric(gan=model,
                                  loader=test_loader,
