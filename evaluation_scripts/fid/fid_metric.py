@@ -172,7 +172,7 @@ class FIDMetric:
         for i, data in tqdm(enumerate(self.loader),
                             desc='Computing generated distribution',
                             total=len(self.loader)):
-            x, y, mean, std, mask = data[0]
+            y, x, mask, mean, std = data[0]
             x = x.cuda()
             y = y.cuda()
             mask = mask.cuda()
@@ -199,7 +199,7 @@ class FIDMetric:
         for i, data in tqdm(enumerate(self.dev_loader),
                             desc='Computing generated distribution',
                             total=len(self.dev_loader)):
-            x, y, mean, std, mask = data[0]
+            y, x, mask, mean, std = data[0]
             x = x.cuda()
             y = y.cuda()
             mask = mask.cuda()
@@ -248,7 +248,7 @@ class FIDMetric:
 
         for data in tqdm(self.ref_loader,
                          desc='Computing reference distribution'):
-            x, y, mean, std, mask = data[0]
+            y, x, mask, mean, std = data[0]
             x = x.cuda()
             y = y.cuda()
             mask = mask.cuda()
