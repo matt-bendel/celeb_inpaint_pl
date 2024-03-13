@@ -158,7 +158,6 @@ class FIDMetric:
                                 device=inp.device)
         for i in range(inp.size(0)):
             if mean is None:
-                print('none')
                 im = inp[i, :, :, :]
             else:
                 im = inp[i, :, :, :] * std[i, :, None, None] + mean[i, :, None, None]
@@ -191,7 +190,7 @@ class FIDMetric:
 
             with torch.no_grad():
                 for j in range(1):
-                    image = self._get_embed_im(recon, None, None)
+                    image = self._get_embed_im(recon, mean, std)
                     condition_im = self._get_embed_im(y, mean, std)
 
                     img_e = self.image_embedding(image)
@@ -224,7 +223,7 @@ class FIDMetric:
 
             with torch.no_grad():
                 for j in range(1):
-                    image = self._get_embed_im(recon, None, None)
+                    image = self._get_embed_im(recon, mean, std)
                     condition_im = self._get_embed_im(y, mean, std)
 
                     img_e = self.image_embedding(image)
