@@ -114,6 +114,7 @@ class FIDMetric:
     def __init__(self,
                  gan,
                  ref_loader,
+                 dev_loader,
                  loader,
                  image_embedding,
                  condition_embedding,
@@ -126,6 +127,7 @@ class FIDMetric:
         self.gan = gan
         self.args = args
         self.ref_loader = ref_loader
+        self.dev_loader = dev_loader
         self.loader = loader
         self.image_embedding = image_embedding
         self.condition_embedding = condition_embedding
@@ -155,7 +157,7 @@ class FIDMetric:
 
     def _get_embed_im(self, inp, mean, std):
         embed_ims = torch.zeros(size=(inp.size(0), 3, 256, 256),
-                                device=self.args.device)
+                                device=inp.device)
         for i in range(inp.size(0)):
             im = inp[i, :, :, :] * std[i, :, None, None] + mean[i, :, None, None]
             im = 2 * (im - torch.min(im)) / (torch.max(im) - torch.min(im)) - 1

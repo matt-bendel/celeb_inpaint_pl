@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 from matplotlib import gridspec
 from utils.embeddings import InceptionEmbedding
 from evaluation_scripts.cfid.cfid_metric import CFIDMetric
+from evaluation_scripts.fid.fid_metric import FIDMetric
 
 
 def load_object(dct):
@@ -61,6 +62,18 @@ if __name__ == "__main__":
         model.cuda()
         model.eval()
 
+        fid_metric = FIDMetric(gan=model,
+                               loader=test_loader,
+                               image_embedding=inception_embedding,
+                               condition_embedding=inception_embedding,
+                               cuda=True,
+                               args=cfg,
+                               dev_loader=val_loader,
+                               ref_loader=train_loader,
+                               num_samps=1)
+
+        fid_val = fid_metric.get_cfid_torch_pinv().cpu().numpy()
+
         cfid_metric = CFIDMetric(gan=model,
                                  loader=test_loader,
                                  image_embedding=inception_embedding,
@@ -71,7 +84,6 @@ if __name__ == "__main__":
                                  num_samps=1)
 
         cfid_val_1 = cfid_metric.get_cfid_torch_pinv().cpu().numpy()
-        exit()
 
         cfid_metric = CFIDMetric(gan=model,
                                  loader=test_loader,
