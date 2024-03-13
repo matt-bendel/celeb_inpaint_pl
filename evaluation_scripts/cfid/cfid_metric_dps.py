@@ -221,7 +221,7 @@ class CFIDMetric:
 
                 with torch.no_grad():
                     for j in range(self.num_samps):
-                        image = self._get_embed_im(recon, mean, std)
+                        image = self._get_embed_im(recon, None, None)
                         condition_im = self._get_embed_im(y, mean, std)
                         true_im = self._get_embed_im(x, mean, std)
 
@@ -266,7 +266,7 @@ class CFIDMetric:
 
                 with torch.no_grad():
                     for j in range(self.num_samps):
-                        image = self._get_embed_im(recon, mean, std)
+                        image = self._get_embed_im(recon, None, None)
                         condition_im = self._get_embed_im(y, mean, std)
                         true_im = self._get_embed_im(x, mean, std)
 

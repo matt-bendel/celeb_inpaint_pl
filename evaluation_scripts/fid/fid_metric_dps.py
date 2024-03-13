@@ -157,7 +157,11 @@ class FIDMetric:
         embed_ims = torch.zeros(size=(inp.size(0), 3, 256, 256),
                                 device=inp.device)
         for i in range(inp.size(0)):
-            im = inp[i, :, :, :] * std[i, :, None, None] + mean[i, :, None, None]
+            if mean is None:
+                im = inp[i, :, :, :]
+            else:
+                im = inp[i, :, :, :] * std[i, :, None, None] + mean[i, :, None, None]
+
             im = 2 * (im - torch.min(im)) / (torch.max(im) - torch.min(im)) - 1
             embed_ims[i, :, :, :] = im
 
@@ -179,14 +183,14 @@ class FIDMetric:
 
             recon = torch.zeros(x.shape)
             for j in range(x.shape[0]):
-                recon[j] = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + j}_sample_0.pt') * std[0, :, None, None] + mean[0, :, None, None]
+                recon[j] = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + j}_sample_0.pt')
 
             recon = recon.cuda()
             count += y.shape[0]
 
             with torch.no_grad():
                 for j in range(1):
-                    image = self._get_embed_im(recon, mean, std)
+                    image = self._get_embed_im(recon, None, None)
                     condition_im = self._get_embed_im(y, mean, std)
 
                     img_e = self.image_embedding(image)
@@ -219,7 +223,7 @@ class FIDMetric:
 
             with torch.no_grad():
                 for j in range(1):
-                    image = self._get_embed_im(recon, mean, std)
+                    image = self._get_embed_im(recon, None, None)
                     condition_im = self._get_embed_im(y, mean, std)
 
                     img_e = self.image_embedding(image)
