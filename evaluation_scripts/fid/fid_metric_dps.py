@@ -179,7 +179,7 @@ class FIDMetric:
 
             recon = torch.zeros(x.shape)
             for j in range(x.shape[0]):
-                recon[j] = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + j}_sample_0.pt')
+                recon[j] = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + j}_sample_0.pt') * std[0, :, None, None] + mean[0, :, None, None]
 
             recon = recon.cuda()
             count += y.shape[0]
