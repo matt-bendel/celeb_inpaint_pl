@@ -229,7 +229,7 @@ class FIDMetric:
                                    left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
             ax = plt.subplot(gs[0, 0])
-            ax.imshow(np.transpose(x[0].cpu().numpy(), (1, 2, 0)))
+            ax.imshow(np.transpose((x[0] * std[0, :, None, None] + mean[0, :, None, None]).cpu().numpy(), (1, 2, 0)))
             ax.set_xticklabels([])
             ax.set_yticklabels([])
             ax.set_xticks([])
@@ -237,7 +237,7 @@ class FIDMetric:
             ax.set_title("x")
 
             ax = plt.subplot(gs[0, 1])
-            ax.imshow(np.transpose(recon[0].cpu().numpy(), (1, 2, 0)))
+            ax.imshow(np.transpose((recon[0] * std[0, :, None, None] + mean[0, :, None, None]).cpu().numpy(), (1, 2, 0)))
             ax.set_xticklabels([])
             ax.set_yticklabels([])
             ax.set_xticks([])
@@ -364,8 +364,8 @@ class FIDMetric:
         """
 
         if self.mu_real is None:
-            self._get_reference_distribution()
             self._get_generated_distribution()
+            self._get_reference_distribution()
         elif resample:
             self._get_generated_distribution()
 
