@@ -108,7 +108,7 @@ if __name__ == "__main__":
                                        top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
                                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
-
+                # TODO: Fix color map normalization
                 for l in range(5):
                     ax = plt.subplot(gs[0, l])
                     im_np = vh[l].reshape((3, 256, 256))
