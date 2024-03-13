@@ -1,12 +1,11 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
-import os
 import torch
 
 import numpy as np
-import sigpy as sp
 from scipy import linalg
 from tqdm import tqdm
 
+# TODO
 
 def symmetric_matrix_square_root_torch(mat, eps=1e-10):
     """Compute square root of a symmetric matrix.
@@ -178,11 +177,36 @@ class FIDMetric:
             mean = mean.cuda()
             std = std.cuda()
 
-            truncation_latent = None
+            with torch.no_grad():
+                for j in range(1):
+                    recon = self.gan(y, mask)
+
+                    image = self._get_embed_im(recon, mean, std)
+                    condition_im = self._get_embed_im(y, mean, std)
+
+                    img_e = self.image_embedding(image)
+                    cond_e = self.condition_embedding(condition_im)
+
+                    if self.cuda:
+                        image_embed.append(img_e.to('cuda:1'))
+                        cond_embed.append(cond_e.to('cuda:1'))
+                    else:
+                        image_embed.append(img_e.cpu().numpy())
+                        cond_embed.append(cond_e.cpu().numpy())
+
+        for i, data in tqdm(enumerate(self.dev_loader),
+                            desc='Computing generated distribution',
+                            total=len(self.dev_loader)):
+            x, y, mean, std, mask = data[0]
+            x = x.cuda()
+            y = y.cuda()
+            mask = mask.cuda()
+            mean = mean.cuda()
+            std = std.cuda()
 
             with torch.no_grad():
-                for j in range(32):
-                    recon = self.gan(y, x=x, mask=mask, truncation=None, truncation_latent=truncation_latent)
+                for j in range(1):
+                    recon = self.gan(y, mask)
 
                     image = self._get_embed_im(recon, mean, std)
                     condition_im = self._get_embed_im(y, mean, std)
@@ -506,11 +530,6 @@ def torch_calculate_frechet_distance(mu1, sigma1, mu2, sigma2, eps=1e-6):
     # Run 50 itrs of newton-schulz to get the matrix sqrt of sigma1 dot sigma2
     covmean = sqrt_newton_schulz(sigma1.mm(sigma2).unsqueeze(0), 50).squeeze()
     tr_covmean = torch.trace(covmean)
-
-    print(diff.dot(diff))
-    print(torch.trace(sigma1))
-    print(torch.trace(sigma2))
-    print(tr_covmean)
 
     out = diff.dot(diff) + torch.trace(sigma1) + torch.trace(sigma2) - 2 * tr_covmean
     return out
