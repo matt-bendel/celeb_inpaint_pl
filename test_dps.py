@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 from matplotlib import gridspec
 from utils.embeddings import InceptionEmbedding
 from evaluation_scripts.cfid.cfid_metric_dps import CFIDMetric
+from evaluation_scripts.fid.fid_metric_dps import FIDMetric
 
 
 def load_object(dct):
@@ -47,6 +48,18 @@ if __name__ == "__main__":
     inception_embedding = InceptionEmbedding()
 
     with torch.no_grad():
+        fid_metric = FIDMetric(loader=test_loader,
+                               image_embedding=inception_embedding,
+                               condition_embedding=inception_embedding,
+                               cuda=True,
+                               args=cfg,
+                               dev_loader=val_loader,
+                               ref_loader=train_loader)
+
+        fid_val = fid_metric.get_fid()
+        print(fid_val)
+        exit()
+
         cfid_metric = CFIDMetric(loader=test_loader,
                                  image_embedding=inception_embedding,
                                  condition_embedding=inception_embedding,
