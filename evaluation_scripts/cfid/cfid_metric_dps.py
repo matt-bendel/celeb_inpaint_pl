@@ -196,6 +196,8 @@ class CFIDMetric:
 
 
         if self.dev_loader:
+            count = 0
+
             for i, data in tqdm(enumerate(self.dev_loader),
                                 desc='Computing generated distribution',
                                 total=len(self.dev_loader)):
@@ -206,14 +208,19 @@ class CFIDMetric:
                 mean = mean.cuda()
                 std = std.cuda()
 
+                recon = torch.zeros(x.shape)
+                for j in range(x.shape[0]):
+                    recon[j] = torch.load(f'/storage/matt_models/inpainting/dps/val/image_{count + j}_sample_0.pt')
+
+                recon = recon.cuda()
+                count += y.shape[0]
+
                 # truncation_latent = None
                 # if self.truncation_latent is not None:
                 #     truncation_latent = self.truncation_latent.unsqueeze(0).repeat(y.size(0), 1)
 
                 with torch.no_grad():
                     for j in range(self.num_samps):
-                        recon = self.gan(y, mask)
-
                         image = self._get_embed_im(recon, mean, std)
                         condition_im = self._get_embed_im(y, mean, std)
                         true_im = self._get_embed_im(x, mean, std)
@@ -235,6 +242,8 @@ class CFIDMetric:
                             cond_embed.append(cond_e.cpu().numpy())
 
         if self.train_loader:
+            count = 0
+
             for i, data in tqdm(enumerate(self.train_loader),
                                 desc='Computing generated distribution',
                                 total=len(self.train_loader)):
@@ -245,10 +254,18 @@ class CFIDMetric:
                 mean = mean.cuda()
                 std = std.cuda()
 
+                if count >= 38559:
+                    break
+
+                recon = torch.zeros(x.shape)
+                for j in range(x.shape[0]):
+                    recon[j] = torch.load(f'/storage/matt_models/inpainting/dps/train/image_{count + j}_sample_0.pt')
+
+                recon = recon.cuda()
+                count += y.shape[0]
+
                 with torch.no_grad():
                     for j in range(self.num_samps):
-                        recon = self.gan(y, mask)
-
                         image = self._get_embed_im(recon, mean, std)
                         condition_im = self._get_embed_im(y, mean, std)
                         true_im = self._get_embed_im(x, mean, std)
