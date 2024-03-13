@@ -113,7 +113,6 @@ class CFIDMetric:
     """
 
     def __init__(self,
-                 gan,
                  loader,
                  image_embedding,
                  condition_embedding,
@@ -126,7 +125,6 @@ class CFIDMetric:
                  dev_loader=None,
                  train_loader=None,):
 
-        self.gan = gan
         self.args = args
         self.loader = loader
         self.image_embedding = image_embedding
