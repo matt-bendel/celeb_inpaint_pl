@@ -158,6 +158,7 @@ class FIDMetric:
                                 device=inp.device)
         for i in range(inp.size(0)):
             if mean is None:
+                print('none')
                 im = inp[i, :, :, :]
             else:
                 im = inp[i, :, :, :] * std[i, :, None, None] + mean[i, :, None, None]
