@@ -66,10 +66,6 @@ if __name__ == "__main__":
             mean = mean.cuda()
             std = std.cuda()
 
-            if i <= 14:
-                count += y.shape[0]
-                continue
-
             mask = torch.zeros(mask.shape)
             for j in range(x.shape[0]):
                 mask[j] = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + j}_mask.pt')

@@ -30,6 +30,8 @@ class LPIPSMetric:
 
                 mask = mask.cuda()
 
+                y = x * mask
+
                 mean = mean.cuda()
                 std = std.cuda()
                 samp_count = 5
@@ -95,6 +97,8 @@ class LPIPSMetric:
                 mask = mask.cuda()
 
                 count += y.shape[0]
+
+                y = x * mask
 
                 mean = mean.cuda()
                 std = std.cuda()
