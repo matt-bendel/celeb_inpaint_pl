@@ -40,7 +40,7 @@ class LPIPSMetric:
                 langevin_x = torch.zeros(size=(x.size(0), 3, 256, 256)).cuda()
 
                 for k in range(samp_count):
-                    img1 = self.G(y, mask)
+                    img1 = self.G.forward(y, mask)
 
                     embedImg1 = torch.zeros(size=(img1.size(0), 3, 256, 256)).cuda()
                     embedImg2 = torch.zeros(size=(img1.size(0), 3, 256, 256)).cuda()
@@ -113,7 +113,7 @@ class LPIPSMetric:
                 valid_inds = []
 
                 for k in range(samp_count):
-                    img1 = self.G(y, mask)
+                    img1 = self.G.forward(y, mask)
 
                     embedImg1 = torch.zeros(size=(img1.size(0), 3, 256, 256)).cuda()
                     embedImg2 = torch.zeros(size=(img1.size(0), 3, 256, 256)).cuda()

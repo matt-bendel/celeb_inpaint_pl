@@ -57,6 +57,7 @@ if __name__ == "__main__":
                 checkpoint_path=cfg.checkpoint_dir + args.exp_name + '/checkpoint_best.ckpt')
         model.cuda()
         model.eval()
+        running_count = 0
 
         for i, data in enumerate(test_loader):
             y, x, mask, mean, std = data[0]
@@ -89,6 +90,11 @@ if __name__ == "__main__":
             zfr = y * std[:, :, None, None] + mean[:, :, None, None]
 
             for j in range(y.size(0)):
+                if running_count != 404:
+                    continue
+
+                running_count += 1
+
                 np_gt = None
 
                 np_gt = gt[j].cpu().numpy()
