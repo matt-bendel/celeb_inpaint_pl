@@ -32,7 +32,7 @@ class LPIPSMetric:
 
                 mean = mean.cuda()
                 std = std.cuda()
-                samp_count = 32
+                samp_count = 5
                 lpips_vals = np.zeros((y.size(0), samp_count))
                 lpips_vals_lang = np.zeros((y.size(0), samp_count))
 
