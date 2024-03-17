@@ -8,17 +8,15 @@ import matplotlib.pyplot as plt
 class LPIPSMetric:
     def __init__(self, G, data_loader):
         self.G = G
-        self.G.update_gen_status(val=True)
         self.loader = data_loader
         self.model = PerceptualLoss(model='net-lin',net='alex')
 
-    def compute_lpips(self, num_runs, truncation, truncation_latent):
+    def compute_lpips(self, num_runs):
         meta_dists = []
         im_dict = {}
+        count = 0
 
         for i in range(1):
-            break
-            dists = []
             total = 0
             for j, data in tqdm(enumerate(self.loader),
                                 desc='Computing generated distribution',
@@ -26,7 +24,14 @@ class LPIPSMetric:
                 x, y, mean, std, mask = data[0]
                 x = x.cuda()
                 y = y.cuda()
+                mask = torch.zeros(mask.shape)
+                for j in range(x.shape[0]):
+                    mask[j] = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + j}_mask.pt')
+
                 mask = mask.cuda()
+
+                count += y.shape[0]
+
                 mean = mean.cuda()
                 std = std.cuda()
                 samp_count = 32
@@ -37,7 +42,7 @@ class LPIPSMetric:
                 langevin_x = torch.zeros(size=(x.size(0), 3, 256, 256)).cuda()
 
                 for k in range(samp_count):
-                    img1 = self.G(y, x=x, mask=mask, truncation=None, truncation_latent=None)
+                    img1 = self.G(y, mask)
 
                     embedImg1 = torch.zeros(size=(img1.size(0), 3, 256, 256)).cuda()
                     embedImg2 = torch.zeros(size=(img1.size(0), 3, 256, 256)).cuda()
@@ -73,6 +78,7 @@ class LPIPSMetric:
         print(sorted_dict.keys())
         # TODO: CONVERT TO DICT
         total = 0
+        count = 0
         fig_count = 0
         with torch.no_grad():
             for j, data in tqdm(enumerate(self.loader),
@@ -81,7 +87,15 @@ class LPIPSMetric:
                 x, y, mean, std, mask = data[0]
                 x = x.cuda()
                 y = y.cuda()
+
+                mask = torch.zeros(mask.shape)
+                for j in range(x.shape[0]):
+                    mask[j] = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + j}_mask.pt')
+
                 mask = mask.cuda()
+
+                count += y.shape[0]
+
                 mean = mean.cuda()
                 std = std.cuda()
                 samp_count = 32
@@ -99,7 +113,7 @@ class LPIPSMetric:
                 valid_inds = []
 
                 for k in range(samp_count):
-                    img1 = self.G(y, x=x, mask=mask, truncation=None, truncation_latent=None)
+                    img1 = self.G(y, mask)
 
                     embedImg1 = torch.zeros(size=(img1.size(0), 3, 256, 256)).cuda()
                     embedImg2 = torch.zeros(size=(img1.size(0), 3, 256, 256)).cuda()

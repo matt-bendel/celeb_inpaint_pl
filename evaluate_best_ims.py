@@ -7,8 +7,6 @@ import matplotlib.pyplot as plt
 # TODO: REMOVE
 ################
 from utils.parse_args import create_arg_parser
-from data_loaders.prepare_data import create_data_loaders
-from wrappers.our_gen_wrapper import load_best_gan
 from evaluation_scripts.lpips.lpips_metric import LPIPSMetric
 
 def get_lpips(args, G, test_loader, num_runs, t, truncation_latent=None):

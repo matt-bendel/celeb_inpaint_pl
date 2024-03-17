@@ -116,7 +116,7 @@ if __name__ == "__main__":
                     ax.set_yticks([])
                     # ax.set_title(f"{methods[k]} {l+1}")
 
-                plt.savefig(f'figures/inpainting/example_{method}_{fig_count}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'figures/inpainting/5_recons_{method}_{fig_count}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
 
                 if fig_count == args.num_figs:
