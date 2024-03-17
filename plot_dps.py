@@ -68,6 +68,9 @@ if __name__ == "__main__":
             gt = x * std[:, :, None, None] + mean[:, :, None, None]
             zfr = y * std[:, :, None, None] + mean[:, :, None, None]
 
+            for k in range(5):
+                gens[:, k, :, :, :] = gens[:, k, :, :, :] * (1 - mask) + x * mask
+
             for j in range(y.size(0)):
                 print(running_count)
                 if running_count not in [52, 503, 47, 623, 729, 42, 345, 614, 54, 489, 349, 287, 833, 342, 73, 633, 873,
@@ -104,7 +107,7 @@ if __name__ == "__main__":
                 ax.set_xticks([])
                 ax.set_yticks([])
 
-                plt.savefig(f'figures/inpainting/original_{running_count}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'figures/inpainting/original_{running_count - 1}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
 
                 nrow = 1
@@ -124,7 +127,7 @@ if __name__ == "__main__":
                 ax.set_xticks([])
                 ax.set_yticks([])
 
-                plt.savefig(f'figures/inpainting/masked_{running_count}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'figures/inpainting/masked_{running_count - 1}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
 
                 nrow = 1
@@ -147,7 +150,7 @@ if __name__ == "__main__":
                     ax.set_yticks([])
                     # ax.set_title(f"{methods[k]} {l+1}")
 
-                plt.savefig(f'figures/inpainting/5_recons_dps_{running_count}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'figures/inpainting/5_recons_dps_{running_count - 1}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
 
                 fig_count += 1
