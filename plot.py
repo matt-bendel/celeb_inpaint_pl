@@ -125,7 +125,7 @@ if __name__ == "__main__":
                     ax.set_yticklabels([])
                     ax.set_xticks([])
                     ax.set_yticks([])
-                    # ax.set_title(f"{methods[k]} {l+1}")
+                    ax.set_title(f"{l}")
 
                 plt.savefig(f'figures/inpainting/5_recons_{method}_{running_count - 1}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
