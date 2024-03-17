@@ -116,7 +116,7 @@ if __name__ == "__main__":
                                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
                 inds = [28, 20, 13, 5, 3]
-                for l in range[5]:
+                for l in range(5):
                     ax = plt.subplot(gs[0, l])
                     im = ax.imshow(np.transpose(np_samps[inds[l]], (1, 2, 0)))
                     ax.set_xticklabels([])
