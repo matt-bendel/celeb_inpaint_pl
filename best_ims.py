@@ -56,6 +56,6 @@ if __name__ == "__main__":
         model.cuda()
         model.eval()
 
-        get_lpips(args, model, test_loader, 1, None, truncation_latent=None)
+        get_lpips(args, model, test_loader, 1)
 
 
