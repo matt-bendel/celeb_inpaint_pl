@@ -65,28 +65,24 @@ if __name__ == "__main__":
             mean = mean.cuda()
             std = std.cuda()
 
+            gens = torch.zeros(size=(y.size(0), 5, 3, cfg.im_size, cfg.im_size))
             mask = torch.zeros(mask.shape)
             for j in range(x.shape[0]):
+                for k in range(5):
+                    gens[j, k] = torch.load(f'/storage/matt_models/inpainting/dps/val/image_{count + j}_sample_{k}.pt')
                 mask[j] = torch.load(f'/storage/matt_models/inpainting/dps/val/image_{count + j}_sample_0.pt')
 
+            recon = recon.cuda()
             mask = mask.cuda()
 
             count += y.shape[0]
 
             y = x * mask
 
-            gens = torch.zeros(
-                size=(y.size(0), cfg.num_z_test, 3, cfg.im_size, cfg.im_size)).cuda()
-
-            for z in range(cfg.num_z_test):
-                gens[:, z, :, :, :] = model.forward(y, mask) * std[:, :, None, None] + mean[:, :, None, None]
-
             gt = x * std[:, :, None, None] + mean[:, :, None, None]
             zfr = y * std[:, :, None, None] + mean[:, :, None, None]
 
             for j in range(y.size(0)):
-                np_gt = None
-
                 np_gt = gt[j].cpu().numpy()
                 np_zfr = zfr[j].cpu().numpy()
 
@@ -94,7 +90,7 @@ if __name__ == "__main__":
 
                 # Global recon, error, std
                 nrow = 1
-                ncol = 7
+                ncol = 1
 
                 fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
@@ -104,23 +100,48 @@ if __name__ == "__main__":
                                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
                 ax = plt.subplot(gs[0, 0])
-                ax.imshow(np.transpose(np_gt, (1, 2, 0)))
+                im = ax.imshow(np.transpose(np_gt, (1, 2, 0)))
                 ax.set_xticklabels([])
                 ax.set_yticklabels([])
                 ax.set_xticks([])
                 ax.set_yticks([])
-                ax.set_title("x")
 
-                ax = plt.subplot(gs[0, 1])
-                ax.imshow(np.transpose(np_zfr, (1, 2, 0)))
+                plt.savefig(f'figures/inpainting/original_{fig_count}.png', bbox_inches='tight', dpi=300)
+                plt.close(fig)
+
+                nrow = 1
+                ncol = 1
+
+                fig = plt.figure(figsize=(ncol + 1, nrow + 1))
+
+                gs = gridspec.GridSpec(nrow, ncol,
+                                       wspace=0.0, hspace=0.0,
+                                       top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
+                                       left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+
+                ax = plt.subplot(gs[0, 0])
+                im = ax.imshow(np.transpose(np_zfr, (1, 2, 0)))
                 ax.set_xticklabels([])
                 ax.set_yticklabels([])
                 ax.set_xticks([])
                 ax.set_yticks([])
-                ax.set_title("y")
+
+                plt.savefig(f'figures/inpainting/masked_{fig_count}.png', bbox_inches='tight', dpi=300)
+                plt.close(fig)
+
+                nrow = 1
+                ncol = 5
+
+                fig = plt.figure(figsize=(ncol + 1, nrow + 1))
+
+                gs = gridspec.GridSpec(nrow, ncol,
+                                       wspace=0.0, hspace=0.0,
+                                       top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
+                                       left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+
 
                 for l in range(5):
-                    ax = plt.subplot(gs[0, l + 2])
+                    ax = plt.subplot(gs[0, l])
                     im = ax.imshow(np.transpose(np_samps[l], (1, 2, 0)))
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
@@ -128,7 +149,7 @@ if __name__ == "__main__":
                     ax.set_yticks([])
                     # ax.set_title(f"{methods[k]} {l+1}")
 
-                plt.savefig(f'figures/inpainting/example_{method}_{fig_count}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'figures/inpainting/5_recons_dps_{fig_count}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
 
                 if fig_count == args.num_figs:
