@@ -69,7 +69,7 @@ if __name__ == "__main__":
             zfr = y * std[:, :, None, None] + mean[:, :, None, None]
 
             for k in range(5):
-                gens[:, k, :, :, :] = gens[:, k, :, :, :] * (1 - mask) + x * mask
+                gens[:, k, :, :, :] = gens[:, k, :, :, :] * (1 - mask) + gt * mask
 
             for j in range(y.size(0)):
                 print(running_count)
