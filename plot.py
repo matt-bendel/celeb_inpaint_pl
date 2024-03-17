@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
             mask = torch.zeros(mask.shape)
             for j in range(x.shape[0]):
-                mask[j] = torch.load(f'/storage/matt_models/inpainting/dps/test/image{count + j}_mask.pt')
+                mask[j] = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + j}_mask.pt')
 
             mask = mask.cuda()
 
