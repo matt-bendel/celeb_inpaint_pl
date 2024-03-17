@@ -108,7 +108,7 @@ if __name__ == "__main__":
                 ax.set_xticks([])
                 ax.set_yticks([])
 
-                plt.savefig(f'figures/inpainting/original_{fig_count}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'figures/inpainting/original_{running_count}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
 
                 nrow = 1
@@ -128,7 +128,7 @@ if __name__ == "__main__":
                 ax.set_xticks([])
                 ax.set_yticks([])
 
-                plt.savefig(f'figures/inpainting/masked_{fig_count}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'figures/inpainting/masked_{running_count}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
 
                 nrow = 1
@@ -154,6 +154,4 @@ if __name__ == "__main__":
                 plt.savefig(f'figures/inpainting/5_recons_dps_{running_count}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
 
-                if fig_count == args.num_figs:
-                    exit()
                 fig_count += 1
