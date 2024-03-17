@@ -41,6 +41,7 @@ if __name__ == "__main__":
     test_loader = dm.test_dataloader()
 
     count = 0
+    running_count = 0
 
     with torch.no_grad():
         for i, data in enumerate(test_loader):
@@ -72,6 +73,18 @@ if __name__ == "__main__":
             zfr = y * std[:, :, None, None] + mean[:, :, None, None]
 
             for j in range(y.size(0)):
+                print(running_count)
+                if running_count not in [52, 503, 47, 623, 729, 42, 345, 614, 54, 489, 349, 287, 833, 342, 73, 633, 873,
+                                         387, 350, 109, 805, 376, 404, 590, 672]:
+                    running_count += 1
+                    continue
+
+                if running_count not in [109, 287, 342, 387, 623, 633, 729, 805]:
+                    running_count += 1
+                    continue
+
+                running_count += 1
+
                 np_gt = gt[j].cpu().numpy()
                 np_zfr = zfr[j].cpu().numpy()
 
@@ -138,7 +151,7 @@ if __name__ == "__main__":
                     ax.set_yticks([])
                     # ax.set_title(f"{methods[k]} {l+1}")
 
-                plt.savefig(f'figures/inpainting/5_recons_dps_{fig_count}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'figures/inpainting/5_recons_dps_{running_count}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
 
                 if fig_count == args.num_figs:
