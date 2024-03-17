@@ -30,8 +30,6 @@ class LPIPSMetric:
 
                 mask = mask.cuda()
 
-                count += y.shape[0]
-
                 mean = mean.cuda()
                 std = std.cuda()
                 samp_count = 32
@@ -51,7 +49,7 @@ class LPIPSMetric:
                     embedImgLang2 = torch.zeros(size=(img1.size(0), 3, 256, 256)).cuda()
 
                     for l in range(img1.size(0)):
-                        recon_object = torch.load(f'/storage/celebA-HQ/langevin_recons_256/image_{j*20 + l}_sample_{k}.pt')
+                        recon_object = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + l}_sample_{k}.pt')
                         langevin_ims[l, k, :, :, :] = recon_object['x_hat']
                         if k == 0:
                             langevin_x[l, :, :, :] = recon_object['gt']
@@ -66,6 +64,8 @@ class LPIPSMetric:
 
                         embedImgLang1[l, :, :, :] = 2*(langevin_x[l, :, :, :] - torch.min(langevin_x[l, :, :, :])) / (torch.max(langevin_x[l, :, :, :]) - torch.min(langevin_x[l, :, :, :])) - 1
                         embedImgLang2[l, :, :, :] = 2*(langevin_ims[l, k, :, :, :] - torch.min(langevin_ims[l, k, :, :, :])) / (torch.max(langevin_ims[l, k, :, :, :]) - torch.min(langevin_ims[l, k, :, :, :])) - 1
+
+                    count += y.shape[0]
 
                     lpips_vals[:, k] = self.model.forward(embedImg1.to("cuda:0"), embedImg2.to("cuda:0")).data.cpu().squeeze().numpy()
                     lpips_vals_lang[:, k] = self.model.forward(embedImgLang1.to("cuda:0"), embedImgLang2.to("cuda:0")).data.cpu().squeeze().numpy()
