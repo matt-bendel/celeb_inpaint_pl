@@ -57,7 +57,7 @@ if __name__ == "__main__":
                     gens[j, k] = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + j}_sample_{k}.pt')
                 mask[j] = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + j}_mask.pt')
 
-            recon = recon.cuda()
+            gens = gens.cuda()
             mask = mask.cuda()
 
             count += y.shape[0]
