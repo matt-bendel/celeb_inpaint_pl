@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
             for j in range(y.size(0)):
                 print(running_count)
-                if running_count not in [404, 590, 672]:
+                if running_count not in [52, 503, 47, 623, 729, 42, 345, 614, 54, 489, 349, 287, 833, 342, 73, 633, 873, 387, 350, 109, 805, 376, 404, 590, 672]:
                     running_count += 1
                     continue
 
@@ -102,7 +102,7 @@ if __name__ == "__main__":
 
                 # Global recon, error, std
                 nrow = 1
-                ncol = 5
+                ncol = 6
 
                 fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
@@ -110,6 +110,13 @@ if __name__ == "__main__":
                                        wspace=0.0, hspace=0.0,
                                        top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
                                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+
+                ax = plt.subplot(gs[0, 5])
+                im = ax.imshow(np.transpose(np_zfr, (1, 2, 0)))
+                ax.set_xticklabels([])
+                ax.set_yticklabels([])
+                ax.set_xticks([])
+                ax.set_yticks([])
 
                 for l in range(5):
                     ax = plt.subplot(gs[0, l])
