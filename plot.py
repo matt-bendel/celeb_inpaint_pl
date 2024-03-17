@@ -91,7 +91,7 @@ if __name__ == "__main__":
                     running_count += 1
                     continue
 
-                if running_count not in [52]:
+                if running_count not in [109]:
                     running_count += 1
                     continue
 
@@ -115,7 +115,7 @@ if __name__ == "__main__":
                                        top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
                                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
-                inds = [21, 2, 15, 5, 3]
+                inds = [28, 19, 11, 6, 8]
                 for l in range(5):
                     ax = plt.subplot(gs[0, l])
                     im = ax.imshow(np.transpose(np_samps[inds[l]], (1, 2, 0)))
