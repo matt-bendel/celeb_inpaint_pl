@@ -86,7 +86,7 @@ if __name__ == "__main__":
             zfr = y * std[:, :, None, None] + mean[:, :, None, None]
 
             for j in range(y.size(0)):
-                if running_count != 404:
+                if running_count not in [404, 590, 672]:
                     continue
 
                 running_count += 1
