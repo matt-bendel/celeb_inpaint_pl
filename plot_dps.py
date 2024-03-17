@@ -54,8 +54,8 @@ if __name__ == "__main__":
             mask = torch.zeros(mask.shape)
             for j in range(x.shape[0]):
                 for k in range(5):
-                    gens[j, k] = torch.load(f'/storage/matt_models/inpainting/dps/val/image_{count + j}_sample_{k}.pt')
-                mask[j] = torch.load(f'/storage/matt_models/inpainting/dps/val/image_{count + j}_sample_0.pt')
+                    gens[j, k] = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + j}_sample_{k}.pt')
+                mask[j] = torch.load(f'/storage/matt_models/inpainting/dps/test/mask_{count + j}.pt')
 
             recon = recon.cuda()
             mask = mask.cuda()
