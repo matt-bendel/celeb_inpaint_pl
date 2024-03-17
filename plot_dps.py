@@ -43,21 +43,6 @@ if __name__ == "__main__":
     count = 0
 
     with torch.no_grad():
-        if args.eigengan:
-            method = 'eigengan'
-            model = EigenGAN.load_from_checkpoint(
-                checkpoint_path=cfg.checkpoint_dir + args.exp_name + '/checkpoint_best.ckpt')
-        elif args.comodgan:
-            method = 'comodgan'
-            model = CoModGAN.load_from_checkpoint(
-                checkpoint_path=cfg.checkpoint_dir + args.exp_name + '/checkpoint_best.ckpt')
-        else:
-            method = 'rcgan'
-            model = rcGAN.load_from_checkpoint(
-                checkpoint_path=cfg.checkpoint_dir + args.exp_name + '/checkpoint_best.ckpt')
-        model.cuda()
-        model.eval()
-
         for i, data in enumerate(test_loader):
             y, x, mask, mean, std = data[0]
             y = y.cuda()
