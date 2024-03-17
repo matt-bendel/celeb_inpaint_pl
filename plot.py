@@ -111,7 +111,7 @@ if __name__ == "__main__":
                                        top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
                                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
-                ax = plt.subplot(gs[0, 5])
+                ax = plt.subplot(gs[0, 32])
                 im = ax.imshow(np.transpose(np_zfr, (1, 2, 0)))
                 ax.set_xticklabels([])
                 ax.set_yticklabels([])
