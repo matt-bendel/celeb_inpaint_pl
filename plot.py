@@ -91,7 +91,7 @@ if __name__ == "__main__":
                     running_count += 1
                     continue
 
-                if running_count not in [47]:
+                if running_count not in [42]:
                     running_count += 1
                     continue
 
@@ -115,9 +115,10 @@ if __name__ == "__main__":
                                        top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
                                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
-                for l in [28, 20, 13, 5, 3]:
+                inds = [28, 20, 13, 5, 3]
+                for l in range[5]:
                     ax = plt.subplot(gs[0, l])
-                    im = ax.imshow(np.transpose(np_samps[l], (1, 2, 0)))
+                    im = ax.imshow(np.transpose(np_samps[inds[l]], (1, 2, 0)))
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
                     ax.set_xticks([])
