@@ -94,7 +94,7 @@ if __name__ == "__main__":
 
                 # Global recon, error, std
                 nrow = 1
-                ncol = 7
+                ncol = 5
 
                 fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
@@ -103,24 +103,8 @@ if __name__ == "__main__":
                                        top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
                                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
-                ax = plt.subplot(gs[0, 0])
-                ax.imshow(np.transpose(np_gt, (1, 2, 0)))
-                ax.set_xticklabels([])
-                ax.set_yticklabels([])
-                ax.set_xticks([])
-                ax.set_yticks([])
-                ax.set_title("x")
-
-                ax = plt.subplot(gs[0, 1])
-                ax.imshow(np.transpose(np_zfr, (1, 2, 0)))
-                ax.set_xticklabels([])
-                ax.set_yticklabels([])
-                ax.set_xticks([])
-                ax.set_yticks([])
-                ax.set_title("y")
-
                 for l in range(5):
-                    ax = plt.subplot(gs[0, l + 2])
+                    ax = plt.subplot(gs[0, l])
                     im = ax.imshow(np.transpose(np_samps[l], (1, 2, 0)))
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
