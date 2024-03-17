@@ -44,6 +44,9 @@ if __name__ == "__main__":
 
     with torch.no_grad():
         for i, data in enumerate(test_loader):
+            if i <= 14:
+                continue
+
             y, x, mask, mean, std = data[0]
             y = y.cuda()
             x = x.cuda()
