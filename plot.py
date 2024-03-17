@@ -88,6 +88,7 @@ if __name__ == "__main__":
             for j in range(y.size(0)):
                 print(running_count)
                 if running_count not in [404, 590, 672]:
+                    running_count += 1
                     continue
 
                 running_count += 1
