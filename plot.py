@@ -59,14 +59,15 @@ if __name__ == "__main__":
         model.eval()
 
         for i, data in enumerate(test_loader):
-            if i <= 14:
-                continue
-
             y, x, mask, mean, std = data[0]
             y = y.cuda()
             x = x.cuda()
             mean = mean.cuda()
             std = std.cuda()
+
+            if i <= 14:
+                count += y.shape[0]
+                continue
 
             mask = torch.zeros(mask.shape)
             for j in range(x.shape[0]):
