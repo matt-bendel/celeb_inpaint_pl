@@ -91,6 +91,10 @@ if __name__ == "__main__":
                     running_count += 1
                     continue
 
+                if running_count not in [47]:
+                    running_count += 1
+                    continue
+
                 running_count += 1
 
                 np_gt = None
@@ -102,7 +106,7 @@ if __name__ == "__main__":
 
                 # Global recon, error, std
                 nrow = 1
-                ncol = 33
+                ncol = 5
 
                 fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
@@ -111,14 +115,7 @@ if __name__ == "__main__":
                                        top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
                                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
-                ax = plt.subplot(gs[0, 32])
-                im = ax.imshow(np.transpose(np_zfr, (1, 2, 0)))
-                ax.set_xticklabels([])
-                ax.set_yticklabels([])
-                ax.set_xticks([])
-                ax.set_yticks([])
-
-                for l in range(32):
+                for l in [28, 20, 13, 5, 3]:
                     ax = plt.subplot(gs[0, l])
                     im = ax.imshow(np.transpose(np_samps[l], (1, 2, 0)))
                     ax.set_xticklabels([])
