@@ -21,7 +21,7 @@ class LPIPSMetric:
             for j, data in tqdm(enumerate(self.loader),
                                 desc='Computing generated distribution',
                                 total=len(self.loader)):
-                x, y, mean, std, mask = data[0]
+                y, x, mask, mean, std = data[0]
                 x = x.cuda()
                 y = y.cuda()
                 mask = torch.zeros(mask.shape)
@@ -84,7 +84,7 @@ class LPIPSMetric:
             for j, data in tqdm(enumerate(self.loader),
                                 desc='Computing generated distribution',
                                 total=len(self.loader)):
-                x, y, mean, std, mask = data[0]
+                y, x, mask, mean, std = data[0]
                 x = x.cuda()
                 y = y.cuda()
 
