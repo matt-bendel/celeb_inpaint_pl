@@ -50,9 +50,9 @@ class LPIPSMetric:
 
                     for l in range(img1.size(0)):
                         recon_object = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + l}_sample_{k}.pt')
-                        langevin_ims[l, k, :, :, :] = recon_object['x_hat']
+                        langevin_ims[l, k, :, :, :] = recon_object
                         if k == 0:
-                            langevin_x[l, :, :, :] = recon_object['gt']
+                            langevin_x[l, :, :, :] = x[l]
 
                         im1 = img1[l, :, :, :] * std[l, :, None, None] + mean[l, :, None, None]
                         im1 = 2 * (im1 - torch.min(im1)) / (torch.max(im1) - torch.min(im1)) - 1
