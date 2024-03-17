@@ -51,10 +51,6 @@ if __name__ == "__main__":
             mean = mean.cuda()
             std = std.cuda()
 
-            if i <= 14:
-                count += y.shape[0]
-                continue
-
             gens = torch.zeros(size=(y.size(0), 5, 3, cfg.im_size, cfg.im_size))
             mask = torch.zeros(mask.shape)
             for j in range(x.shape[0]):
