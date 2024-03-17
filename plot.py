@@ -102,7 +102,7 @@ if __name__ == "__main__":
 
                 # Global recon, error, std
                 nrow = 1
-                ncol = 6
+                ncol = 33
 
                 fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
@@ -118,7 +118,7 @@ if __name__ == "__main__":
                 ax.set_xticks([])
                 ax.set_yticks([])
 
-                for l in range(5):
+                for l in range(32):
                     ax = plt.subplot(gs[0, l])
                     im = ax.imshow(np.transpose(np_samps[l], (1, 2, 0)))
                     ax.set_xticklabels([])
