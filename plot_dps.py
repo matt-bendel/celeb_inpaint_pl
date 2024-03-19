@@ -68,8 +68,9 @@ if __name__ == "__main__":
             gt = x * std[:, :, None, None] + mean[:, :, None, None]
             zfr = y * std[:, :, None, None] + mean[:, :, None, None]
 
-            # for k in range(5):
-            #     gens[:, k, :, :, :] = gens[:, k, :, :, :] * (1 - mask) + gt * mask
+            gens_dc = torch.zeros(gens.shape).cuda()
+            for k in range(5):
+                gens_dc[:, k, :, :, :] = gens[:, k, :, :, :] * (1 - mask) + gt * mask
 
             for j in range(y.size(0)):
                 print(running_count)
@@ -88,6 +89,7 @@ if __name__ == "__main__":
                 np_zfr = zfr[j].cpu().numpy()
 
                 np_samps = gens[j].cpu().numpy()
+                np_samps_dc = gens_dc[j].cpu().numpy()
 
                 # Global recon, error, std
                 nrow = 1
@@ -150,7 +152,27 @@ if __name__ == "__main__":
                     ax.set_yticks([])
                     # ax.set_title(f"{methods[k]} {l+1}")
 
-                plt.savefig(f'figures/inpainting/5_recons_dps_{running_count - 1}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'figures/inpainting/5_recons_dps_{running_count - 1}_wo_dc.png', bbox_inches='tight', dpi=300)
+                plt.close(fig)
+
+                fig = plt.figure(figsize=(ncol + 1, nrow + 1))
+
+                gs = gridspec.GridSpec(nrow, ncol,
+                                       wspace=0.0, hspace=0.0,
+                                       top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
+                                       left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+
+                for l in range(5):
+                    ax = plt.subplot(gs[0, l])
+                    im = ax.imshow(np.transpose(np_samps_dc[l], (1, 2, 0)))
+                    ax.set_xticklabels([])
+                    ax.set_yticklabels([])
+                    ax.set_xticks([])
+                    ax.set_yticks([])
+                    # ax.set_title(f"{methods[k]} {l+1}")
+
+                plt.savefig(f'figures/inpainting/5_recons_dps_{running_count - 1}_w_dc.png', bbox_inches='tight',
+                            dpi=300)
                 plt.close(fig)
 
                 fig_count += 1
