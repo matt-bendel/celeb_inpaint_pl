@@ -87,17 +87,17 @@ if __name__ == "__main__":
 
             for j in range(y.size(0)):
                 print(running_count)
-                if running_count not in [52, 503, 47, 623, 729, 42, 345, 614, 54, 489, 349, 287, 833, 342, 73, 633, 873, 387, 350, 109, 805, 376, 404, 590, 672]:
+                if running_count not in [765, 241, 454, 828, 477, 52, 503, 47, 623, 729, 42, 345, 614, 54, 489, 349, 287, 833, 342, 73, 633, 873, 387, 350, 109, 805, 376, 404, 590, 672]:
                     running_count += 1
                     continue
 
-                if running_count not in [109, 287, 342, 387, 623, 633, 729, 805, 503]:
+                if running_count not in [765, 241, 454, 828, 477, 109, 287, 342, 387, 623, 633, 729, 805, 503]:
                     running_count += 1
                     continue
 
-                if running_count not in [503]:
-                    running_count += 1
-                    continue
+                # if running_count not in [503]:
+                #     running_count += 1
+                #     continue
 
                 running_count += 1
 
@@ -110,7 +110,7 @@ if __name__ == "__main__":
 
                 # Global recon, error, std
                 nrow = 1
-                ncol = 5
+                ncol = 32
 
                 fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
@@ -120,7 +120,7 @@ if __name__ == "__main__":
                                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
                 # inds = [31, 29, 28, 25, 6]
-                for l in range(5):
+                for l in range(32):
                     ax = plt.subplot(gs[0, l])
                     im = ax.imshow(np.transpose(np_samps[l], (1, 2, 0)))
                     ax.set_xticklabels([])
@@ -128,7 +128,7 @@ if __name__ == "__main__":
                     ax.set_xticks([])
                     ax.set_yticks([])
 
-                plt.savefig(f'figures/inpainting/5_recons_{method}_{running_count - 1}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'figures/inpainting_temp/5_recons_{method}_{running_count - 1}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
 
                 if fig_count == args.num_figs:
