@@ -79,7 +79,7 @@ if __name__ == "__main__":
                     running_count += 1
                     continue
 
-                if running_count not in [109, 287, 342, 387, 623, 633, 729, 805]:
+                if running_count not in [109, 287, 342, 387, 623, 633, 729, 805, 503]:
                     running_count += 1
                     continue
 
