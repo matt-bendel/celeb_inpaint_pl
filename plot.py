@@ -95,6 +95,10 @@ if __name__ == "__main__":
                     running_count += 1
                     continue
 
+                if running_count not in [503]:
+                    running_count += 1
+                    continue
+
                 running_count += 1
 
                 np_gt = None
