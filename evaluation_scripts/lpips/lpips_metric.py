@@ -76,7 +76,7 @@ class LPIPSMetric:
 
                 count += y.shape[0]
 
-        sorted_dict = dict(sorted(im_dict.items(), key=lambda x: x[1], reverse=True)[-25:])
+        sorted_dict = dict(sorted(im_dict.items(), key=lambda x: x[1], reverse=True)[-30:])
         print(sorted_dict.keys())
         # TODO: CONVERT TO DICT
         total = 0
