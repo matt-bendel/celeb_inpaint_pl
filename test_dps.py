@@ -62,6 +62,8 @@ if __name__ == "__main__":
             mean = mean.cuda()
             std = std.cuda()
 
+            x = x * std[:, None, None, None] + mean[:, None, None, None]
+
             sample = torch.zeros(x.shape)
             for j in range(x.shape[0]):
                 sample[j] = torch.load(f'/storage/matt_models/inpainting/dps/test_20k/image_{count + j}_sample_0.pt')
