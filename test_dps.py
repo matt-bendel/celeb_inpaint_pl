@@ -4,6 +4,7 @@ import types
 import json
 
 import numpy as np
+import lpips
 
 from data.lightning.CelebAHQDataModule import CelebAHQDataModule
 from data.lightning.FFHQDataModule import FFHQDataModule
