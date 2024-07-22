@@ -62,7 +62,7 @@ if __name__ == "__main__":
             mean = mean.cuda()
             std = std.cuda()
 
-            x = x * std[:, None, None, None] + mean[:, None, None, None]
+            x = x * std[:, :, None, None] + mean[:, :, None, None]
 
             sample = torch.zeros(x.shape)
             for j in range(x.shape[0]):
