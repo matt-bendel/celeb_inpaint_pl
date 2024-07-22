@@ -49,11 +49,6 @@ if __name__ == "__main__":
     inception_embedding = InceptionEmbedding()
 
     with torch.no_grad():
-        for i, data in enumerate(test_loader):
-            tmp = data[0]
-            print(i)
-
-        exit()
         if args.eigengan:
             model = EigenGAN.load_from_checkpoint(
                 checkpoint_path=cfg.checkpoint_dir + args.exp_name + '/checkpoint_best.ckpt')
