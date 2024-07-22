@@ -41,6 +41,7 @@ if __name__ == "__main__":
         dm = FFHQDataModule(cfg)
     else:
         dm = CelebAHQDataModule(cfg)
+
     dm.setup()
     test_loader = dm.test_dataloader()
     val_loader = dm.val_dataloader()

@@ -174,7 +174,6 @@ class FIDMetric:
         for i, data in tqdm(enumerate(self.loader),
                             desc='Computing generated distribution',
                             total=len(self.loader)):
-            break
             y, x, mask, mean, std = data[0]
             x = x.cuda()
             y = y.cuda()
