@@ -47,10 +47,13 @@ if __name__ == "__main__":
     val_loader = dm.val_dataloader()
     train_loader = dm.train_dataloader()
     inception_embedding = InceptionEmbedding()
-    print(len(test_loader))
-    exit()
 
     with torch.no_grad():
+        for i, data in enumerate(test_loader):
+            tmp = data[0]
+            print(i)
+
+        exit()
         if args.eigengan:
             model = EigenGAN.load_from_checkpoint(
                 checkpoint_path=cfg.checkpoint_dir + args.exp_name + '/checkpoint_best.ckpt')
