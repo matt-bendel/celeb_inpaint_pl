@@ -63,6 +63,25 @@ if __name__ == "__main__":
         model.cuda()
         model.eval()
 
+        loss_fn_vgg = lpips.LPIPS(net='vgg').cuda()
+        lpips_list = []
+
+        for i, data in enumerate(test_loader):
+            y, x, mask, mean, std = data[0]
+            x = x.cuda()
+            y = y.cuda()
+            mask = mask.cuda()
+            mean = mean.cuda()
+            std = std.cuda()
+
+            sample = model(y, mask)
+            lpips_val = loss_fn_vgg(sample, x)
+            lpips_list.append(lpips_val.detach().cpu().numpy())
+
+        print(f'LPIPS: {np.mean(lpips_list)}')
+        exit()
+
+
 
 
         fid_metric = FIDMetric(gan=model,
