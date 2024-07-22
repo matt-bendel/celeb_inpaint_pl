@@ -73,9 +73,6 @@ if __name__ == "__main__":
 
         fid_val = fid_metric.get_fid()
 
-        print(fid_val)
-        exit()
-
         cfid_metric = CFIDMetric(gan=model,
                                  loader=test_loader,
                                  image_embedding=inception_embedding,
@@ -87,34 +84,35 @@ if __name__ == "__main__":
 
         cfid_val_1 = cfid_metric.get_cfid_torch_pinv().cpu().numpy()
 
-        cfid_metric = CFIDMetric(gan=model,
-                                 loader=test_loader,
-                                 image_embedding=inception_embedding,
-                                 condition_embedding=inception_embedding,
-                                 cuda=True,
-                                 args=cfg,
-                                 dev_loader=val_loader,
-                                 train_loader=False,
-                                 num_samps=8)
+        # cfid_metric = CFIDMetric(gan=model,
+        #                          loader=test_loader,
+        #                          image_embedding=inception_embedding,
+        #                          condition_embedding=inception_embedding,
+        #                          cuda=True,
+        #                          args=cfg,
+        #                          dev_loader=val_loader,
+        #                          train_loader=False,
+        #                          num_samps=8)
+        #
+        # cfids = cfid_metric.get_cfid_torch_pinv().cpu().numpy()
+        #
+        # cfid_val_2 = np.mean(cfids)
+        #
+        # cfid_metric = CFIDMetric(gan=model,
+        #                          loader=test_loader,
+        #                          image_embedding=inception_embedding,
+        #                          condition_embedding=inception_embedding,
+        #                          cuda=True,
+        #                          args=cfg,
+        #                          train_loader=train_loader,
+        #                          dev_loader=val_loader,
+        #                          num_samps=1)
+        #
+        # cfids = cfid_metric.get_cfid_torch_pinv().cpu().numpy()
+        #
+        # cfid_val_3 = np.mean(cfids)
 
-        cfids = cfid_metric.get_cfid_torch_pinv().cpu().numpy()
-
-        cfid_val_2 = np.mean(cfids)
-
-        cfid_metric = CFIDMetric(gan=model,
-                                 loader=test_loader,
-                                 image_embedding=inception_embedding,
-                                 condition_embedding=inception_embedding,
-                                 cuda=True,
-                                 args=cfg,
-                                 train_loader=train_loader,
-                                 dev_loader=val_loader,
-                                 num_samps=1)
-
-        cfids = cfid_metric.get_cfid_torch_pinv().cpu().numpy()
-
-        cfid_val_3 = np.mean(cfids)
-
+        print(f'FID: {fid_val}')
         print(f'CFID_1: {cfid_val_1}')
-        print(f'CFID_2: {cfid_val_2}')
-        print(f'CFID_3: {cfid_val_3}')
+        # print(f'CFID_2: {cfid_val_2}')
+        # print(f'CFID_3: {cfid_val_3}')

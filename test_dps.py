@@ -57,8 +57,6 @@ if __name__ == "__main__":
                                ref_loader=train_loader)
 
         fid_val = fid_metric.get_fid()
-        print(fid_val)
-        exit()
 
         cfid_metric = CFIDMetric(loader=test_loader,
                                  image_embedding=inception_embedding,
@@ -73,4 +71,5 @@ if __name__ == "__main__":
 
         cfid_val_3 = np.mean(cfids)
 
+        print(f'FID: {fid_val}')
         print(f'CFID_3: {cfid_val_3}')
