@@ -204,23 +204,23 @@ class FIDMetric:
                         image_embed.append(img_e.cpu().numpy())
                         cond_embed.append(cond_e.cpu().numpy())
 
-        count = 0
-        for i, data in tqdm(enumerate(self.dev_loader),
-                            desc='Computing generated distribution',
-                            total=len(self.dev_loader)):
-            y, x, mask, mean, std = data[0]
-            x = x.cuda()
-            y = y.cuda()
-            mask = mask.cuda()
-            mean = mean.cuda()
-            std = std.cuda()
-
-            recon = torch.zeros(x.shape)
-            for j in range(x.shape[0]):
-                recon[j] = torch.load(f'/storage/matt_models/inpainting/dps/val/image_{count + j}_sample_0.pt')
-
-            recon = recon.cuda()
-            count += y.shape[0]
+        # count = 0
+        # for i, data in tqdm(enumerate(self.dev_loader),
+        #                     desc='Computing generated distribution',
+        #                     total=len(self.dev_loader)):
+        #     y, x, mask, mean, std = data[0]
+        #     x = x.cuda()
+        #     y = y.cuda()
+        #     mask = mask.cuda()
+        #     mean = mean.cuda()
+        #     std = std.cuda()
+        #
+        #     recon = torch.zeros(x.shape)
+        #     for j in range(x.shape[0]):
+        #         recon[j] = torch.load(f'/storage/matt_models/inpainting/dps/val/image_{count + j}_sample_0.pt')
+        #
+        #     recon = recon.cuda()
+        #     count += y.shape[0]
 
             # nrow = 1
             # ncol = 2

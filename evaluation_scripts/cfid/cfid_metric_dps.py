@@ -195,96 +195,96 @@ class CFIDMetric:
                         cond_embed.append(cond_e.cpu().numpy())
 
 
-        if self.dev_loader:
-            count = 0
+        # if self.dev_loader:
+        #     count = 0
 
-            for i, data in tqdm(enumerate(self.dev_loader),
-                                desc='Computing generated distribution',
-                                total=len(self.dev_loader)):
-                y, x, mask, mean, std = data[0]
-                x = x.cuda()
-                y = y.cuda()
-                mask = mask.cuda()
-                mean = mean.cuda()
-                std = std.cuda()
-
-                recon = torch.zeros(x.shape)
-                for j in range(x.shape[0]):
-                    recon[j] = torch.load(f'/storage/matt_models/inpainting/dps/val/image_{count + j}_sample_0.pt')
-
-                recon = recon.cuda()
-                count += y.shape[0]
-
-                # truncation_latent = None
-                # if self.truncation_latent is not None:
-                #     truncation_latent = self.truncation_latent.unsqueeze(0).repeat(y.size(0), 1)
-
-                with torch.no_grad():
-                    for j in range(self.num_samps):
-                        image = self._get_embed_im(recon, mean, std)
-                        condition_im = self._get_embed_im(y, mean, std)
-                        true_im = self._get_embed_im(x, mean, std)
-
-                        img_e = self.image_embedding(image)
-                        cond_e = self.condition_embedding(condition_im)
-                        true_e = self.image_embedding(true_im)
-
-                        if self.cuda:
-                            # true_embed.append(true_e.to('cuda:2'))
-                            # image_embed.append(img_e.to('cuda:1'))
-                            # cond_embed.append(cond_e.to('cuda:1'))
-                            true_embed.append(true_e)
-                            image_embed.append(img_e)
-                            cond_embed.append(cond_e)
-                        else:
-                            true_embed.append(true_e.cpu().numpy())
-                            image_embed.append(img_e.cpu().numpy())
-                            cond_embed.append(cond_e.cpu().numpy())
-
-        if self.train_loader:
-            count = 0
-
-            for i, data in tqdm(enumerate(self.train_loader),
-                                desc='Computing generated distribution',
-                                total=len(self.train_loader)):
-                y, x, mask, mean, std = data[0]
-                x = x.cuda()
-                y = y.cuda()
-                mask = mask.cuda()
-                mean = mean.cuda()
-                std = std.cuda()
-
-                if count >= 38559:
-                    break
-
-                recon = torch.zeros(x.shape)
-                for j in range(x.shape[0]):
-                    recon[j] = torch.load(f'/storage/matt_models/inpainting/dps/train/image_{count + j}_sample_0.pt')
-
-                recon = recon.cuda()
-                count += y.shape[0]
-
-                with torch.no_grad():
-                    for j in range(self.num_samps):
-                        image = self._get_embed_im(recon, mean, std)
-                        condition_im = self._get_embed_im(y, mean, std)
-                        true_im = self._get_embed_im(x, mean, std)
-
-                        img_e = self.image_embedding(image)
-                        cond_e = self.condition_embedding(condition_im)
-                        true_e = self.image_embedding(true_im)
-
-                        if self.cuda:
-                            # true_embed.append(true_e.to('cuda:2'))
-                            # image_embed.append(img_e.to('cuda:1'))
-                            # cond_embed.append(cond_e.to('cuda:1'))
-                            true_embed.append(true_e)
-                            image_embed.append(img_e)
-                            cond_embed.append(cond_e)
-                        else:
-                            true_embed.append(true_e.cpu().numpy())
-                            image_embed.append(img_e.cpu().numpy())
-                            cond_embed.append(cond_e.cpu().numpy())
+        #     for i, data in tqdm(enumerate(self.dev_loader),
+        #                         desc='Computing generated distribution',
+        #                         total=len(self.dev_loader)):
+        #         y, x, mask, mean, std = data[0]
+        #         x = x.cuda()
+        #         y = y.cuda()
+        #         mask = mask.cuda()
+        #         mean = mean.cuda()
+        #         std = std.cuda()
+        #
+        #         recon = torch.zeros(x.shape)
+        #         for j in range(x.shape[0]):
+        #             recon[j] = torch.load(f'/storage/matt_models/inpainting/dps/val/image_{count + j}_sample_0.pt')
+        #
+        #         recon = recon.cuda()
+        #         count += y.shape[0]
+        #
+        #         # truncation_latent = None
+        #         # if self.truncation_latent is not None:
+        #         #     truncation_latent = self.truncation_latent.unsqueeze(0).repeat(y.size(0), 1)
+        #
+        #         with torch.no_grad():
+        #             for j in range(self.num_samps):
+        #                 image = self._get_embed_im(recon, mean, std)
+        #                 condition_im = self._get_embed_im(y, mean, std)
+        #                 true_im = self._get_embed_im(x, mean, std)
+        #
+        #                 img_e = self.image_embedding(image)
+        #                 cond_e = self.condition_embedding(condition_im)
+        #                 true_e = self.image_embedding(true_im)
+        #
+        #                 if self.cuda:
+        #                     # true_embed.append(true_e.to('cuda:2'))
+        #                     # image_embed.append(img_e.to('cuda:1'))
+        #                     # cond_embed.append(cond_e.to('cuda:1'))
+        #                     true_embed.append(true_e)
+        #                     image_embed.append(img_e)
+        #                     cond_embed.append(cond_e)
+        #                 else:
+        #                     true_embed.append(true_e.cpu().numpy())
+        #                     image_embed.append(img_e.cpu().numpy())
+        #                     cond_embed.append(cond_e.cpu().numpy())
+        #
+        # if self.train_loader:
+        #     count = 0
+        #
+        #     for i, data in tqdm(enumerate(self.train_loader),
+        #                         desc='Computing generated distribution',
+        #                         total=len(self.train_loader)):
+        #         y, x, mask, mean, std = data[0]
+        #         x = x.cuda()
+        #         y = y.cuda()
+        #         mask = mask.cuda()
+        #         mean = mean.cuda()
+        #         std = std.cuda()
+        #
+        #         if count >= 38559:
+        #             break
+        #
+        #         recon = torch.zeros(x.shape)
+        #         for j in range(x.shape[0]):
+        #             recon[j] = torch.load(f'/storage/matt_models/inpainting/dps/train/image_{count + j}_sample_0.pt')
+        #
+        #         recon = recon.cuda()
+        #         count += y.shape[0]
+        #
+        #         with torch.no_grad():
+        #             for j in range(self.num_samps):
+        #                 image = self._get_embed_im(recon, mean, std)
+        #                 condition_im = self._get_embed_im(y, mean, std)
+        #                 true_im = self._get_embed_im(x, mean, std)
+        #
+        #                 img_e = self.image_embedding(image)
+        #                 cond_e = self.condition_embedding(condition_im)
+        #                 true_e = self.image_embedding(true_im)
+        #
+        #                 if self.cuda:
+        #                     # true_embed.append(true_e.to('cuda:2'))
+        #                     # image_embed.append(img_e.to('cuda:1'))
+        #                     # cond_embed.append(cond_e.to('cuda:1'))
+        #                     true_embed.append(true_e)
+        #                     image_embed.append(img_e)
+        #                     cond_embed.append(cond_e)
+        #                 else:
+        #                     true_embed.append(true_e.cpu().numpy())
+        #                     image_embed.append(img_e.cpu().numpy())
+        #                     cond_embed.append(cond_e.cpu().numpy())
 
 
         if self.cuda:

@@ -3,6 +3,7 @@ import yaml
 import types
 import json
 import time
+import lpips
 
 import numpy as np
 
@@ -61,6 +62,8 @@ if __name__ == "__main__":
 
         model.cuda()
         model.eval()
+
+
 
         fid_metric = FIDMetric(gan=model,
                                loader=test_loader,
