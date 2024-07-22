@@ -49,6 +49,32 @@ if __name__ == "__main__":
     inception_embedding = InceptionEmbedding()
 
     with torch.no_grad():
+        loss_fn_vgg = lpips.LPIPS(net='vgg').cuda()
+        lpips_list = []
+        count = 0
+
+        for i, data in enumerate(test_loader):
+            y, x, mask, mean, std = data[0]
+            x = x.cuda()
+            y = y.cuda()
+            mask = mask.cuda()
+            mean = mean.cuda()
+            std = std.cuda()
+
+            sample = torch.zeros(x.shape)
+            for j in range(x.shape[0]):
+                sample[j] = torch.load(f'/storage/matt_models/inpainting/dps/test_20k/image_{count + j}_sample_0.pt')
+
+            sample = sample.cuda()
+            count += y.shape[0]
+
+
+            lpips_val = loss_fn_vgg(sample, x)
+            lpips_list.append(lpips_val.detach().cpu().numpy())
+
+        print(f'LPIPS: {np.mean(lpips_list)}')
+        exit()
+
         fid_metric = FIDMetric(loader=test_loader,
                                image_embedding=inception_embedding,
                                condition_embedding=inception_embedding,
