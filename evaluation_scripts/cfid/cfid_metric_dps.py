@@ -170,7 +170,7 @@ class CFIDMetric:
 
             recon = torch.zeros(x.shape)
             for j in range(x.shape[0]):
-                recon[j] = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + j}_sample_0.pt')
+                recon[j] = torch.load(f'/storage/matt_models/inpainting/dps/test_20k/image_{count + j}_sample_0.pt')
 
             recon = recon.cuda()
             count += y.shape[0]

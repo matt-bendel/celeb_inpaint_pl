@@ -26,7 +26,7 @@ class LPIPSMetric:
                 y = y.cuda()
                 mask = torch.zeros(mask.shape)
                 for j in range(x.shape[0]):
-                    mask[j] = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + j}_mask.pt')
+                    mask[j] = torch.load(f'/storage/matt_models/inpainting/dps/test_20k/image_{count + j}_mask.pt')
 
                 mask = mask.cuda()
 
@@ -51,7 +51,7 @@ class LPIPSMetric:
                     embedImgLang2 = torch.zeros(size=(img1.size(0), 3, 256, 256)).cuda()
 
                     for l in range(img1.size(0)):
-                        recon_object = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + l}_sample_{k}.pt')
+                        recon_object = torch.load(f'/storage/matt_models/inpainting/dps/test_20k/image_{count + l}_sample_{k}.pt')
                         langevin_ims[l, k, :, :, :] = recon_object
                         if k == 0:
                             langevin_x[l, :, :, :] = x[l]
@@ -92,7 +92,7 @@ class LPIPSMetric:
 
                 mask = torch.zeros(mask.shape)
                 for j in range(x.shape[0]):
-                    mask[j] = torch.load(f'/storage/matt_models/inpainting/dps/test/image_{count + j}_mask.pt')
+                    mask[j] = torch.load(f'/storage/matt_models/inpainting/dps/test_20k/image_{count + j}_mask.pt')
 
                 mask = mask.cuda()
 

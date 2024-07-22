@@ -196,32 +196,32 @@ class FIDMetric:
                         image_embed.append(img_e.cpu().numpy())
                         cond_embed.append(cond_e.cpu().numpy())
 
-        for i, data in tqdm(enumerate(self.dev_loader),
-                            desc='Computing generated distribution',
-                            total=len(self.dev_loader)):
-            y, x, mask, mean, std = data[0]
-            x = x.cuda()
-            y = y.cuda()
-            mask = mask.cuda()
-            mean = mean.cuda()
-            std = std.cuda()
-
-            with torch.no_grad():
-                for j in range(1):
-                    recon = self.gan(y, mask)
-
-                    image = self._get_embed_im(recon, mean, std)
-                    condition_im = self._get_embed_im(y, mean, std)
-
-                    img_e = self.image_embedding(image)
-                    cond_e = self.condition_embedding(condition_im)
-
-                    if self.cuda:
-                        image_embed.append(img_e.to('cuda:1'))
-                        cond_embed.append(cond_e.to('cuda:1'))
-                    else:
-                        image_embed.append(img_e.cpu().numpy())
-                        cond_embed.append(cond_e.cpu().numpy())
+        # for i, data in tqdm(enumerate(self.dev_loader),
+        #                     desc='Computing generated distribution',
+        #                     total=len(self.dev_loader)):
+        #     y, x, mask, mean, std = data[0]
+        #     x = x.cuda()
+        #     y = y.cuda()
+        #     mask = mask.cuda()
+        #     mean = mean.cuda()
+        #     std = std.cuda()
+        #
+        #     with torch.no_grad():
+        #         for j in range(1):
+        #             recon = self.gan(y, mask)
+        #
+        #             image = self._get_embed_im(recon, mean, std)
+        #             condition_im = self._get_embed_im(y, mean, std)
+        #
+        #             img_e = self.image_embedding(image)
+        #             cond_e = self.condition_embedding(condition_im)
+        #
+        #             if self.cuda:
+        #                 image_embed.append(img_e.to('cuda:1'))
+        #                 cond_embed.append(cond_e.to('cuda:1'))
+        #             else:
+        #                 image_embed.append(img_e.cpu().numpy())
+        #                 cond_embed.append(cond_e.cpu().numpy())
 
         if self.cuda:
             image_embed = torch.cat(image_embed, dim=0)
