@@ -47,6 +47,8 @@ if __name__ == "__main__":
     val_loader = dm.val_dataloader()
     train_loader = dm.train_dataloader()
     inception_embedding = InceptionEmbedding()
+    print(len(test_loader))
+    exit()
 
     with torch.no_grad():
         if args.eigengan:
