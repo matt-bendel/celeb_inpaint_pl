@@ -26,6 +26,6 @@ gp_weight: 10
 adv_weight: 0.005
 
 # Training
-batch_size: 40 # test 40 train 5
-num_epochs: 150
+batch_size: 5 # test 40 train 5
+num_epochs: 100
 psnr_gain_tol: 0.25

@@ -86,7 +86,7 @@ class Ohayon(pl.LightningModule):
         for k in range(y.shape[0] - 1):
             gen_pred_loss += torch.mean(fake_pred[k + 1])
 
-        return - 5e-3 * gen_pred_loss.mean()
+        return - 1e-3 * gen_pred_loss.mean()
 
     def l2(self, avg_recon, x):
         return F.mse_loss(avg_recon, x)
@@ -124,7 +124,7 @@ class Ohayon(pl.LightningModule):
 
             # adversarial loss is binary cross-entropy
             g_loss = self.adversarial_loss_generator(y, gens)
-            g_loss += 1e-3 * self.l2(avg_recon, x)
+            g_loss += self.l2(avg_recon, x)
 
             self.log('g_loss', g_loss, prog_bar=True)
 
