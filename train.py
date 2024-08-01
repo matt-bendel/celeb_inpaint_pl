@@ -13,6 +13,8 @@ from utils.parse_args import create_arg_parser
 from models.lightning.rcGAN import rcGAN
 from models.lightning.EigenGAN import EigenGAN
 from models.lightning.CoModGAN import CoModGAN
+from models.lightning.Ohayon import Ohayon
+
 from pytorch_lightning import seed_everything
 from pytorch_lightning.loggers import WandbLogger
 
@@ -50,6 +52,8 @@ if __name__ == '__main__':
             model = EigenGAN(cfg, args.exp_name, args.num_gpus)
         elif args.comodgan:
             model = CoModGAN(cfg, args.exp_name, args.num_gpus)
+        elif args.ohayon:
+            model = Ohayon(cfg, args.exp_name, args.num_gpus)
         else:
             model = rcGAN(cfg, args.exp_name, args.num_gpus)
 

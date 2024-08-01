@@ -12,6 +12,7 @@ from utils.parse_args import create_arg_parser
 from models.lightning.rcGAN import rcGAN
 from models.lightning.EigenGAN import EigenGAN
 from models.lightning.CoModGAN import CoModGAN
+from models.lightning.Ohayon import Ohayon
 
 from pytorch_lightning import seed_everything
 from utils.embeddings import InceptionEmbedding
@@ -54,6 +55,8 @@ if __name__ == "__main__":
                     model = EigenGAN.load_from_checkpoint(checkpoint_path=cfg.checkpoint_dir + args.exp_name + f'/checkpoint-epoch={epoch}.ckpt')
                 elif args.comodgan:
                     model = CoModGAN.load_from_checkpoint(checkpoint_path=cfg.checkpoint_dir + args.exp_name + f'/checkpoint-epoch={epoch}.ckpt')
+                elif args.ohayon:
+                    model = Ohayon.load_from_checkpoint(checkpoint_path=cfg.checkpoint_dir + args.exp_name + f'/checkpoint-epoch={epoch}.ckpt')
                 else:
                     model = rcGAN.load_from_checkpoint(checkpoint_path=cfg.checkpoint_dir + args.exp_name + f'/checkpoint-epoch={epoch}.ckpt')
             except Exception as e:

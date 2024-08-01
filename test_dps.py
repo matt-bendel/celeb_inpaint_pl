@@ -62,8 +62,6 @@ if __name__ == "__main__":
             mean = mean.cuda()
             std = std.cuda()
 
-            x = x * std[:, :, None, None] + mean[:, :, None, None]
-
             sample = torch.zeros(x.shape)
             for j in range(x.shape[0]):
                 sample[j] = torch.load(f'/storage/matt_models/inpainting/dps/test_20k/image_{count + j}_sample_0.pt')
@@ -74,9 +72,6 @@ if __name__ == "__main__":
 
             lpips_val = loss_fn_vgg(sample, x)
             lpips_list.append(lpips_val.detach().cpu().numpy())
-
-        print(f'LPIPS: {np.mean(lpips_list)}')
-        exit()
 
         fid_metric = FIDMetric(loader=test_loader,
                                image_embedding=inception_embedding,
@@ -103,3 +98,5 @@ if __name__ == "__main__":
 
         print(f'FID: {fid_val}')
         print(f'CFID_3: {cfid_val_3}')
+        print(f'LPIPS: {np.mean(lpips_list)}')
+

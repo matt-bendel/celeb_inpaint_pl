@@ -18,6 +18,8 @@ def create_arg_parser():
                         help='If the model is EigenGAN')
     parser.add_argument('--comodgan', action='store_true',
                         help='If the model is CoModGAN')
+    parser.add_argument('--ohayon', action='store_true',
+                        help='If the model is Ohayon')
     parser.add_argument('--exp-name', type=str, default="", help='Name for the run.')
     parser.add_argument('--num-gpus', default=1, type=int, help='The number of GPUs to use during training.')
     parser.add_argument('--num-figs', default=1, type=int, help='The number of figures to generate while plotting.')
