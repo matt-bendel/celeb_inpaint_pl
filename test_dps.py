@@ -24,6 +24,17 @@ from evaluation_scripts.fid.fid_metric_dps import FIDMetric
 def load_object(dct):
     return types.SimpleNamespace(**dct)
 
+def clear_color(x):
+    if torch.is_complex(x):
+        x = torch.abs(x)
+    x = x.detach().cpu().squeeze().numpy()
+    return normalize_np(np.transpose(x, (1, 2, 0)))
+
+def normalize_np(img):
+    """ Normalize img in arbitrary range to [0, 1] """
+    img -= np.min(img)
+    img /= np.max(img)
+    return img
 
 if __name__ == "__main__":
     torch.set_float32_matmul_precision('medium')
@@ -65,7 +76,10 @@ if __name__ == "__main__":
             sample = torch.zeros(x.shape)
             for j in range(x.shape[0]):
                 sample[j] = torch.load(f'/storage/matt_models/inpainting/dps/test_20k/image_{count + j}_sample_0.pt')
+                plt.imsave(f'samp_dps_{j}.png', clear_color(sample[j]))
 
+            plt.imsave('gt_dps.png', clear_color(x[0]))
+            exit()
             sample = sample.cuda()
             count += y.shape[0]
 
