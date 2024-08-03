@@ -83,12 +83,6 @@ if __name__ == "__main__":
             lpips_val = loss_fn_vgg(sample, x)
             lpips_list.append(lpips_val.detach().cpu().numpy())
 
-        print(f'LPIPS: {np.mean(lpips_list)}')
-        exit()
-
-
-
-
         fid_metric = FIDMetric(gan=model,
                                loader=test_loader,
                                image_embedding=inception_embedding,
@@ -141,5 +135,6 @@ if __name__ == "__main__":
 
         print(f'FID: {fid_val}')
         print(f'CFID_1: {cfid_val_1}')
+        print(f'LPIPS: {np.mean(lpips_list)}')
         # print(f'CFID_2: {cfid_val_2}')
         # print(f'CFID_3: {cfid_val_3}')
