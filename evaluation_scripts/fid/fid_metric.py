@@ -143,7 +143,7 @@ class FIDMetric:
 
     def _get_joint_statistics(self, image_embed, cond_embed):
         if self.cuda:
-            joint_embed = torch.cat([image_embed, cond_embed], dim=1).to('cuda:3')
+            joint_embed = torch.cat([image_embed, cond_embed], dim=1).to('cuda:1')
         else:
             joint_embed = np.concatenate([image_embed, cond_embed], axis=1)
         print(joint_embed.shape)
@@ -238,7 +238,7 @@ class FIDMetric:
     def _get_reference_distribution(self):
         mu_real, sigma_real = self._compute_reference_distribution()
 
-        self.mu_real, self.sigma_real = mu_real.to('cuda:3'), sigma_real.to('cuda:3')
+        self.mu_real, self.sigma_real = mu_real.to('cuda:1'), sigma_real.to('cuda:1')
 
         return mu_real, sigma_real
 
