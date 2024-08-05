@@ -57,15 +57,15 @@ if __name__ == "__main__":
             mean = mean.cuda()
             std = std.cuda()
 
-            mask = torch.zeros(mask.shape)
-            for j in range(x.shape[0]):
-                mask[j] = torch.load(f'/storage/matt_models/inpainting/dps/test_20k/image_{count + j}_mask.pt')
-
+            # mask = torch.zeros(mask.shape)
+            # for j in range(x.shape[0]):
+            #     mask[j] = torch.load(f'/storage/matt_models/inpainting/dps/test_20k/image_{count + j}_mask.pt')
+            #
             mask = mask.cuda()
 
             count += y.shape[0]
 
-            y = x * mask
+            # y = x * mask
 
             gens = torch.zeros(
                 size=(y.size(0), cfg.num_z_test, 3, cfg.im_size, cfg.im_size)).cuda()
