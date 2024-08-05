@@ -78,6 +78,7 @@ class LPIPSMetric:
 
         sorted_dict = dict(sorted(im_dict.items(), key=lambda x: x[1], reverse=True)[-30:])
         print(sorted_dict.keys())
+        exit()
         # TODO: CONVERT TO DICT
         total = 0
         count = 0
@@ -108,10 +109,10 @@ class LPIPSMetric:
 
                 temp_count = total + y.size(0)
 
-                if temp_count < 732:
-                    total += y.size(0)
-                    fig_count += y.size(0)
-                    continue
+                # if temp_count < 732:
+                #     total += y.size(0)
+                #     fig_count += y.size(0)
+                #     continue
 
                 no_valid = False
                 valid_inds = []
@@ -169,32 +170,32 @@ class LPIPSMetric:
                 else:
                     print("Valid inds...")
 
-                for l in range(lpips_vals.shape[0]):
-                    fig_count += 1
-                    lth_vals = np.array(lpips_vals[l, :])
-
-                    idx = np.argpartition(lth_vals, 30)
-
-                    if fig_count == 732:
-                        fig = plt.figure()
-                        fig.subplots_adjust(wspace=0, hspace=0.05)
-
-                        tc = 1
-                        samp_nums = [31, 30, 29, 26, 25, 24, 23, 21, 20, 18, 17, 16, 13 ,12 ,10, 8, 7]
-                        subsamp_nums = [3, 6, 7, 8, 10, 12, 15, 16]
-                        subsubsamp_nums = [0, 1, 2, 3, 7]
-                        # [0, 4, 5, 6, 20, 22, 23, 24, 25, 27]
-                        for r in range(30):
-                            ax = fig.add_subplot(1, 30, tc)
-                            tc += 1
-                            ax.set_xticks([])
-                            ax.set_yticks([])
-                            # if r == 2:
-                            #     ax.set_xlabel('Ours',fontweight='bold')
-                            ax.imshow(recons[l, idx[r], :, :, :].cpu().numpy().transpose(1, 2, 0))
-
-                        plt.savefig(f'neurips_plots/test_ours/5_recons_ours_{fig_count}.png', bbox_inches='tight', dpi=300)
-                        plt.close(fig)
+                # for l in range(lpips_vals.shape[0]):
+                #     fig_count += 1
+                #     lth_vals = np.array(lpips_vals[l, :])
+                #
+                #     idx = np.argpartition(lth_vals, 30)
+                #
+                #     if fig_count == 732:
+                #         fig = plt.figure()
+                #         fig.subplots_adjust(wspace=0, hspace=0.05)
+                #
+                #         tc = 1
+                #         samp_nums = [31, 30, 29, 26, 25, 24, 23, 21, 20, 18, 17, 16, 13 ,12 ,10, 8, 7]
+                #         subsamp_nums = [3, 6, 7, 8, 10, 12, 15, 16]
+                #         subsubsamp_nums = [0, 1, 2, 3, 7]
+                #         # [0, 4, 5, 6, 20, 22, 23, 24, 25, 27]
+                #         for r in range(30):
+                #             ax = fig.add_subplot(1, 30, tc)
+                #             tc += 1
+                #             ax.set_xticks([])
+                #             ax.set_yticks([])
+                #             # if r == 2:
+                #             #     ax.set_xlabel('Ours',fontweight='bold')
+                #             ax.imshow(recons[l, idx[r], :, :, :].cpu().numpy().transpose(1, 2, 0))
+                #
+                #         plt.savefig(f'neurips_plots/test_ours/5_recons_ours_{fig_count}.png', bbox_inches='tight', dpi=300)
+                #         plt.close(fig)
 
 
         sorted_dict = sorted(im_dict.items(), key=lambda x: x[1], reverse=True)[-25:]

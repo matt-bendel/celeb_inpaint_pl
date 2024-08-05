@@ -51,9 +51,6 @@ if __name__ == "__main__":
         running_count = 0
 
         for i, data in enumerate(test_loader):
-            if i < 10:
-                continue
-
             y, x, mask, mean, std = data[0]
             y = y.cuda()
             x = x.cuda()
@@ -68,7 +65,10 @@ if __name__ == "__main__":
 
             count += y.shape[0]
 
-            # y = x * mask
+            y = x * mask
+
+            if i < 10:
+                continue
 
             gens = torch.zeros(
                 size=(y.size(0), cfg.num_z_test, 3, cfg.im_size, cfg.im_size)).cuda()
