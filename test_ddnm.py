@@ -76,10 +76,10 @@ if __name__ == "__main__":
             sample = torch.zeros(x.shape)
             for j in range(x.shape[0]):
                 sample[j] = torch.load(f'/storage/matt_models/inpainting/ddnm/test_20k/image_{count + j}_sample_0.pt')
-                plt.imsave(f'samp_ddnm_{j}.png', clear_color(sample[j]))
+                # plt.imsave(f'samp_ddnm_{j}.png', clear_color(sample[j]))
 
-            plt.imsave('gt_ddnm.png', clear_color(x[0]))
-            exit()
+            # plt.imsave('gt_ddnm.png', clear_color(x[0]))
+            # exit()
             sample = sample.cuda()
             count += y.shape[0]
 
