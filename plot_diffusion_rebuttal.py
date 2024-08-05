@@ -23,7 +23,7 @@ if __name__ == "__main__":
     torch.set_float32_matmul_precision('medium')
     args = create_arg_parser().parse_args()
     seed_everything(1, workers=True)
-    diff_models = ['dps', 'ddnm']
+    diff_models = ['ddnm']
 
     fname = 'configs/celebahq.yml'
     if args.ffhq:
