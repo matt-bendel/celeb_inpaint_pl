@@ -51,6 +51,9 @@ if __name__ == "__main__":
         running_count = 0
 
         for i, data in enumerate(test_loader):
+            if i < 10:
+                continue
+
             y, x, mask, mean, std = data[0]
             y = y.cuda()
             x = x.cuda()
