@@ -98,7 +98,7 @@ if __name__ == "__main__":
                 ax.set_xticks([])
                 ax.set_yticks([])
 
-                plt.savefig(f'figures/rebuttal/original_{diff_model}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'figures/rebuttal/original_{diff_model}_{fig_count}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
 
                 nrow = 1
@@ -118,7 +118,7 @@ if __name__ == "__main__":
                 ax.set_xticks([])
                 ax.set_yticks([])
 
-                plt.savefig(f'figures/rebuttal/masked_{diff_model}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'figures/rebuttal/masked_{diff_model}_{fig_count}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
 
                 nrow = 1
@@ -147,7 +147,7 @@ if __name__ == "__main__":
                 # ax.set_yticks([])
                     # ax.set_title(f"{methods[k]} {l+1}")
 
-                plt.savefig(f'figures/rebuttal/samps_{diff_model}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'figures/rebuttal/samps_{diff_model}_{fig_count}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
 
                 fig = plt.figure(figsize=(ncol + 1, nrow + 1))
@@ -164,9 +164,10 @@ if __name__ == "__main__":
                 ax.set_xticks([])
                 ax.set_yticks([])
 
-                plt.savefig(f'figures/rebuttal/samps_{diff_model}_dc.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'figures/rebuttal/samps_{diff_model}_dc_{fig_count}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
 
                 fig_count += 1
 
-            exit()
+            if fig_count >= 3:
+                exit()
