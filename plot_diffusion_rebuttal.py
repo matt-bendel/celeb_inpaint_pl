@@ -169,5 +169,5 @@ if __name__ == "__main__":
 
                 fig_count += 1
 
-            if fig_count >= 3:
+            if fig_count >= 4:
                 exit()
