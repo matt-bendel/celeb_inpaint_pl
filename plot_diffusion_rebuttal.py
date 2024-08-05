@@ -37,11 +37,11 @@ if __name__ == "__main__":
         dm = FFHQDataModule(cfg)
     else:
         dm = CelebAHQDataModule(cfg)
-    fig_count = 1
     dm.setup()
     test_loader = dm.test_dataloader()
 
     for diff_model in diff_models:
+        fig_count = 1
         count = 0
         running_count = 0
 
