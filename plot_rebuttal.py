@@ -89,7 +89,7 @@ if __name__ == "__main__":
                 nrow = 1
                 ncol = 1
 
-                for l in range(32):
+                for l in range(5):
                     fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
                     gs = gridspec.GridSpec(nrow, ncol,
@@ -109,6 +109,5 @@ if __name__ == "__main__":
 
                 fig_count += 1
 
-            exit()
             if fig_count >= 11:
                 exit()
