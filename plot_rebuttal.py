@@ -67,8 +67,8 @@ if __name__ == "__main__":
 
             y = x * mask
 
-            if i < 10:
-                continue
+            # if i < 10:
+            #     continue
 
             gens = torch.zeros(
                 size=(y.size(0), cfg.num_z_test, 3, cfg.im_size, cfg.im_size)).cuda()
