@@ -42,6 +42,8 @@ if __name__ == "__main__":
 
     count = 0
 
+    img_inds = [5907, 9350, 1816, 4372, 11835, 1079, 15312, 14879, 8206, 4940, 17884, 14344, 1965, 3722, 14086, 18843, 14547, 5340, 10731, 11841, 15439, 17479, 5606, 1538, 11212, 13777, 5048, 4303, 246, 5932]
+
     with torch.no_grad():
         method = 'eigengan'
         model = EigenGAN.load_from_checkpoint(
@@ -80,6 +82,17 @@ if __name__ == "__main__":
             zfr = y * std[:, :, None, None] + mean[:, :, None, None]
 
             for j in range(y.size(0)):
+                print(running_count)
+                if running_count not in img_inds:
+                    running_count += 1
+                    continue
+
+                if running_count not in img_inds:
+                    running_count += 1
+                    continue
+
+                running_count += 1
+
                 np_gt = gt[j].cpu().numpy()
                 np_zfr = zfr[j].cpu().numpy()
 
