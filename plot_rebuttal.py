@@ -45,8 +45,9 @@ if __name__ == "__main__":
     img_inds = [5907, 9350, 1816, 4372, 11835, 1079, 15312, 14879, 8206, 4940, 17884, 14344, 1965, 3722, 14086, 18843, 14547, 5340, 10731, 11841, 15439, 17479, 5606, 1538, 11212, 13777, 5048, 4303, 246, 5932]
 
     with torch.no_grad():
-        method = 'eigengan'
-        model = EigenGAN.load_from_checkpoint(
+        # methods = ['eigengan']
+        method = 'rcgan'
+        model = rcGAN.load_from_checkpoint(
             checkpoint_path=cfg.checkpoint_dir + args.exp_name + '/checkpoint_best.ckpt')
         model.cuda()
         model.eval()
@@ -120,7 +121,7 @@ if __name__ == "__main__":
                         ax.set_yticks([])
 
 
-                    plt.savefig(f'figures/rebuttal/samps_pcagan_{fig_count}_{rep}.png', bbox_inches='tight', dpi=300)
+                    plt.savefig(f'figures/rebuttal/samps_{method}_{fig_count}_{rep}.png', bbox_inches='tight', dpi=300)
                     plt.close(fig)
 
                 fig_count += 1
