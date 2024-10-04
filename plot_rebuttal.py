@@ -118,7 +118,7 @@ if __name__ == "__main__":
                     ax.set_yticks([])
 
 
-                plt.savefig(f'figures/rebuttal/samps_pcagan_{fig_count}_{l}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'figures/rebuttal/samps_pcagan_{fig_count}.png', bbox_inches='tight', dpi=300)
                 plt.close(fig)
 
                 fig_count += 1
