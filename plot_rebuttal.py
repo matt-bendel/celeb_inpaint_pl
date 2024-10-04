@@ -100,26 +100,28 @@ if __name__ == "__main__":
 
                 # Global recon, error, std
                 nrow = 1
-                ncol = 32
+                ncol = 5
+                n_reps = 5
 
-                fig = plt.figure(figsize=(ncol + 1, nrow + 1))
+                for rep in range(n_reps):
+                    fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
-                gs = gridspec.GridSpec(nrow, ncol,
-                                       wspace=0.0, hspace=0.0,
-                                       top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
-                                       left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+                    gs = gridspec.GridSpec(nrow, ncol,
+                                           wspace=0.0, hspace=0.0,
+                                           top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
+                                           left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
-                for l in range(ncol):
-                    ax = plt.subplot(gs[0, l])
-                    im = ax.imshow(np.transpose(np_samps[l], (1, 2, 0)))
-                    ax.set_xticklabels([])
-                    ax.set_yticklabels([])
-                    ax.set_xticks([])
-                    ax.set_yticks([])
+                    for l in range(ncol):
+                        ax = plt.subplot(gs[0, l])
+                        im = ax.imshow(np.transpose(np_samps[5*rep + l], (1, 2, 0)))
+                        ax.set_xticklabels([])
+                        ax.set_yticklabels([])
+                        ax.set_xticks([])
+                        ax.set_yticks([])
 
 
-                plt.savefig(f'figures/rebuttal/samps_pcagan_{fig_count}.png', bbox_inches='tight', dpi=300)
-                plt.close(fig)
+                    plt.savefig(f'figures/rebuttal/samps_pcagan_{fig_count}_{rep}.png', bbox_inches='tight', dpi=300)
+                    plt.close(fig)
 
                 fig_count += 1
 
