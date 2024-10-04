@@ -103,7 +103,7 @@ class FFHQDataModule(pl.LightningDataModule):
     def test_dataloader(self):
         return DataLoader(
             dataset=self.test,
-            batch_size=self.args.batch_size,
+            batch_size=1,
             num_workers=4,
             pin_memory=False,
             drop_last=False

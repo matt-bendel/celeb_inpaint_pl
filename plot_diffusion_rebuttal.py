@@ -55,6 +55,11 @@ if __name__ == "__main__":
                 mean = mean.cuda()
                 std = std.cuda()
 
+                if i not in img_inds:
+                    running_count += 1
+                    continue
+
+                print(i)
                 gens = torch.zeros(size=(y.size(0), 5, 3, cfg.im_size, cfg.im_size))
                 mask = torch.zeros(mask.shape)
                 for j in range(x.shape[0]):
@@ -77,17 +82,6 @@ if __name__ == "__main__":
                     gens_dc[:, k, :, :, :] = gens[:, k, :, :, :] * (1 - mask) + gt * mask
 
                 for j in range(y.size(0)):
-                    print(running_count)
-                    if running_count not in img_inds:
-                        running_count += 1
-                        continue
-
-                    if running_count not in img_inds:
-                        running_count += 1
-                        continue
-
-                    running_count += 1
-
                     np_gt = gt[j].cpu().numpy()
                     np_zfr = zfr[j].cpu().numpy()
 
