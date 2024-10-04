@@ -142,7 +142,7 @@ if __name__ == "__main__":
 
                     for l in range(5):
                         ax = plt.subplot(gs[0, l])
-                        im = ax.imshow(np.transpose(np_samps[0], (1, 2, 0)))
+                        im = ax.imshow(np.transpose(np_samps[l], (1, 2, 0)))
                         ax.set_xticklabels([])
                         ax.set_yticklabels([])
                         ax.set_xticks([])
