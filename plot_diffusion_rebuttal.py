@@ -23,7 +23,7 @@ if __name__ == "__main__":
     torch.set_float32_matmul_precision('medium')
     args = create_arg_parser().parse_args()
     seed_everything(1, workers=True)
-    diff_models = ['ddrm']
+    diff_models = ['ddrm', 'ddnm', 'dps']
 
     fname = 'configs/celebahq.yml'
     if args.ffhq:
@@ -55,10 +55,10 @@ if __name__ == "__main__":
                 mean = mean.cuda()
                 std = std.cuda()
 
-                gens = torch.zeros(size=(y.size(0), 1, 3, cfg.im_size, cfg.im_size))
+                gens = torch.zeros(size=(y.size(0), 5, 3, cfg.im_size, cfg.im_size))
                 mask = torch.zeros(mask.shape)
                 for j in range(x.shape[0]):
-                    for k in range(1):
+                    for k in range(5):
                         gens[j, k] = torch.load(f'/storage/matt_models/inpainting/{diff_model}/test_20k/image_{count + j}_sample_0.pt') * std[j, :, None, None].cpu() + mean[j, :, None, None].cpu()
                     mask[j] = torch.load(f'/storage/matt_models/inpainting/{diff_model}/test_20k/image_{count + j}_mask.pt')
 
@@ -73,7 +73,7 @@ if __name__ == "__main__":
                 zfr = y * std[:, :, None, None] + mean[:, :, None, None]
 
                 gens_dc = torch.zeros(gens.shape).cuda()
-                for k in range(1):
+                for k in range(5):
                     gens_dc[:, k, :, :, :] = gens[:, k, :, :, :] * (1 - mask) + gt * mask
 
                 for j in range(y.size(0)):
@@ -136,7 +136,7 @@ if __name__ == "__main__":
                     plt.close(fig)
 
                     nrow = 1
-                    ncol = 1
+                    ncol = 5
 
                     fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
@@ -145,13 +145,13 @@ if __name__ == "__main__":
                                            top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
                                            left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
-
-                    ax = plt.subplot(gs[0, 0])
-                    im = ax.imshow(np.transpose(np_samps[0], (1, 2, 0)))
-                    ax.set_xticklabels([])
-                    ax.set_yticklabels([])
-                    ax.set_xticks([])
-                    ax.set_yticks([])
+                    for l in range(5):
+                        ax = plt.subplot(gs[0, l])
+                        im = ax.imshow(np.transpose(np_samps[0], (1, 2, 0)))
+                        ax.set_xticklabels([])
+                        ax.set_yticklabels([])
+                        ax.set_xticks([])
+                        ax.set_yticks([])
 
                     # ax = plt.subplot(gs[0, 1])
                     # im = ax.imshow(np.transpose(np_samps_dc[0], (1, 2, 0)))
