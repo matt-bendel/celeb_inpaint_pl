@@ -110,7 +110,7 @@ if __name__ == "__main__":
                                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
                 for l in range(5):
-                    ax = plt.subplot(gs[0, 0])
+                    ax = plt.subplot(gs[0, l])
                     im = ax.imshow(np.transpose(np_samps[l], (1, 2, 0)))
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
