@@ -57,6 +57,7 @@ if __name__ == "__main__":
 
                 if i not in img_inds:
                     running_count += 1
+                    count += 1
                     continue
 
                 print(i)
