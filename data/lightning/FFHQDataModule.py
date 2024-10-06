@@ -70,7 +70,8 @@ class FFHQDataModule(pl.LightningDataModule):
         # train_val_dataset = datasets.ImageFolder(self.args.data_path, transform=transform)
         transform = transforms.Compose([transforms.ToTensor(), DataTransform(self.args)])
         full_data = datasets.ImageFolder(self.args.data_path, transform=transform)
-        test_data = torch.utils.data.Subset(full_data, range(50000, 70000))
+        # test_data = torch.utils.data.Subset(full_data, range(50000, 70000))
+        test_data = datasets.ImageFolder(self.args.data_path_test, transform=transform)
         train_val_dataset = torch.utils.data.Subset(full_data, range(0, 49000))
 
         train_data, dev_data = torch.utils.data.random_split(
