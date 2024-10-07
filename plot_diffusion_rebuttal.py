@@ -31,6 +31,7 @@ if __name__ == "__main__":
 
     # img_inds = [5907, 9350, 1816, 4372, 11835, 1079, 15312, 14879, 8206, 4940, 17884, 14344, 1965, 3722, 14086, 18843, 14547, 5340, 10731, 11841, 15439, 17479, 5606, 1538, 11212, 13777, 5048, 4303, 246, 5932]
     img_inds = [765, 241, 454, 828, 477, 52, 503, 47, 623, 729, 42, 345, 614, 54, 489, 349, 287, 833, 342, 73, 633, 873, 387, 350, 109, 805, 376, 404, 590, 672]
+    img_inds = [765, 241, 454, 828, 477, 109, 287, 342, 387, 623, 633, 729, 805, 503]
 
     with open(fname, 'r') as f:
         cfg = yaml.load(f, Loader=yaml.FullLoader)
@@ -60,6 +61,8 @@ if __name__ == "__main__":
                     running_count += 1
                     count += 1
                     continue
+
+                running_count += 1
 
                 print(i)
                 gens = torch.zeros(size=(y.size(0), 5, 3, cfg.im_size, cfg.im_size))
@@ -94,42 +97,42 @@ if __name__ == "__main__":
                     nrow = 1
                     ncol = 1
 
-                    fig = plt.figure(figsize=(ncol + 1, nrow + 1))
-
-                    gs = gridspec.GridSpec(nrow, ncol,
-                                           wspace=0.0, hspace=0.0,
-                                           top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
-                                           left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
-
-                    ax = plt.subplot(gs[0, 0])
-                    im = ax.imshow(np.transpose(np_gt, (1, 2, 0)))
-                    ax.set_xticklabels([])
-                    ax.set_yticklabels([])
-                    ax.set_xticks([])
-                    ax.set_yticks([])
-
-                    plt.savefig(f'figures/rebuttal/original_{diff_model}_{running_count - 1}.png', bbox_inches='tight', dpi=300)
-                    plt.close(fig)
+                    # fig = plt.figure(figsize=(ncol + 1, nrow + 1))
+                    #
+                    # gs = gridspec.GridSpec(nrow, ncol,
+                    #                        wspace=0.0, hspace=0.0,
+                    #                        top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
+                    #                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+                    #
+                    # ax = plt.subplot(gs[0, 0])
+                    # im = ax.imshow(np.transpose(np_gt, (1, 2, 0)))
+                    # ax.set_xticklabels([])
+                    # ax.set_yticklabels([])
+                    # ax.set_xticks([])
+                    # ax.set_yticks([])
+                    #
+                    # plt.savefig(f'figures/rebuttal/original_{diff_model}_{running_count - 1}.png', bbox_inches='tight', dpi=300)
+                    # plt.close(fig)
 
                     nrow = 1
                     ncol = 1
 
-                    fig = plt.figure(figsize=(ncol + 1, nrow + 1))
-
-                    gs = gridspec.GridSpec(nrow, ncol,
-                                           wspace=0.0, hspace=0.0,
-                                           top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
-                                           left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
-
-                    ax = plt.subplot(gs[0, 0])
-                    im = ax.imshow(np.transpose(np_zfr, (1, 2, 0)))
-                    ax.set_xticklabels([])
-                    ax.set_yticklabels([])
-                    ax.set_xticks([])
-                    ax.set_yticks([])
-
-                    plt.savefig(f'figures/rebuttal/masked_{diff_model}_{fig_count}.png', bbox_inches='tight', dpi=300)
-                    plt.close(fig)
+                    # fig = plt.figure(figsize=(ncol + 1, nrow + 1))
+                    #
+                    # gs = gridspec.GridSpec(nrow, ncol,
+                    #                        wspace=0.0, hspace=0.0,
+                    #                        top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
+                    #                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+                    #
+                    # ax = plt.subplot(gs[0, 0])
+                    # im = ax.imshow(np.transpose(np_zfr, (1, 2, 0)))
+                    # ax.set_xticklabels([])
+                    # ax.set_yticklabels([])
+                    # ax.set_xticks([])
+                    # ax.set_yticks([])
+                    #
+                    # plt.savefig(f'figures/rebuttal/masked_{diff_model}_{fig_count}.png', bbox_inches='tight', dpi=300)
+                    # plt.close(fig)
 
                     nrow = 1
                     ncol = 5
