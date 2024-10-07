@@ -157,7 +157,7 @@ if __name__ == "__main__":
                     # ax.set_yticks([])
                         # ax.set_title(f"{methods[k]} {l+1}")
 
-                    plt.savefig(f'figures/rebuttal/samps_{diff_model}_{fig_count}.png', bbox_inches='tight', dpi=300)
+                    plt.savefig(f'figures/rebuttal/samps_{diff_model}_{running_count-1}.png', bbox_inches='tight', dpi=300)
                     plt.close(fig)
 
                     # fig = plt.figure(figsize=(ncol + 1, nrow + 1))
