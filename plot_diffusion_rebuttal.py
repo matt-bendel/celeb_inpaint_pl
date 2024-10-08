@@ -24,6 +24,7 @@ if __name__ == "__main__":
     args = create_arg_parser().parse_args()
     seed_everything(1, workers=True)
     diff_models = ['ddrm', 'ddnm', 'dps']
+    diff_models = ['dps']
 
     fname = 'configs/celebahq.yml'
     if args.ffhq:
@@ -83,7 +84,7 @@ if __name__ == "__main__":
                 zfr = y * std[:, :, None, None] + mean[:, :, None, None]
 
                 gens_dc = torch.zeros(gens.shape).cuda()
-                for k in range(5):
+                for k in range(10):
                     gens_dc[:, k, :, :, :] = gens[:, k, :, :, :] * (1 - mask) + gt * mask
 
                 for j in range(y.size(0)):
@@ -135,7 +136,7 @@ if __name__ == "__main__":
                     # plt.close(fig)
 
                     nrow = 1
-                    ncol = 5
+                    ncol = 10
 
                     fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
@@ -144,7 +145,7 @@ if __name__ == "__main__":
                                            top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
                                            left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
-                    for l in range(5):
+                    for l in range(10):
                         ax = plt.subplot(gs[0, l])
                         im = ax.imshow(np.transpose(np_samps[l], (1, 2, 0)))
                         ax.set_xticklabels([])
