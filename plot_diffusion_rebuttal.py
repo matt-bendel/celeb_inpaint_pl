@@ -70,7 +70,7 @@ if __name__ == "__main__":
                 mask = torch.zeros(mask.shape)
                 for j in range(x.shape[0]):
                     idx = 0
-                    for k in [0, 2, 3, 4, 6]:
+                    for k in [0, 4, 5, 6, 9]:
                         gens[j, idx] = torch.load(f'/storage/matt_models/inpainting/{diff_model}/test_20k/image_{count + j}_sample_{k}.pt') * std[j, :, None, None].cpu() + mean[j, :, None, None].cpu()
                         idx += 1
 
